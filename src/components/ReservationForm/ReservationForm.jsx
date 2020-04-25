@@ -32,9 +32,9 @@ class ReservationForm extends Component {
             lastName: '',
             email: '',
             isChecked: false,
-
             date: '',
-
+            minTime: new Date().setHours(9, 0, 0, 0),
+            maxTime: new Date().setHours(18, 45, 0, 0),
             alert: {
                 open: false,
                 severity: 'info',
@@ -58,6 +58,17 @@ class ReservationForm extends Component {
             ...this.state,
             date: this._initDate()
         })
+    }
+
+    componentDidUpdate(){
+        const { date, maxTime } = this.state;
+        const isSaturday = date.getDay() === 6;
+        const isDefaultMaxTime = new Date().setHours(18, 45, 0, 0) === maxTime
+        if(isSaturday && isDefaultMaxTime){
+            this.setState({...this.state, maxTime: new Date().setHours(17, 45, 0 ,0)})
+        } else if(!isSaturday && !isDefaultMaxTime){
+            this.setState({...this.state, maxTime: new Date().setHours(18, 45, 0, 0)})
+        }
     }
 
     _initDate() {
@@ -201,8 +212,8 @@ class ReservationForm extends Component {
                             onChange={this.handleDateChange}
                             minDate={this.minDate}
                             maxDate={this.maxDate}
-                            minTime={new Date().setHours(9, 0)}
-                            maxTime={new Date().setHours(18, 45)}
+                            minTime={this.state.minTime}
+                            maxTime={this.state.maxTime}
                             showTimeSelect
                             timeIntervals={15}
                             timeFormat="p"
