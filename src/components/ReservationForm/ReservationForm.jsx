@@ -25,7 +25,7 @@ class ReservationForm extends Component {
         super(props);
 
         this.minDate = new Date(2020, 4, 2, 9, 0);
-        this.maxDate = new Date(2020, 5, 2, 18, 0);
+        this.maxDate = new Date(2020, 5, 2);
 
         this.state = {
             firstName: '',
@@ -51,6 +51,19 @@ class ReservationForm extends Component {
         this.handleCheckedChange = this.handleCheckedChange.bind(this);
 
         this.handleSendClick = this.handleSendClick.bind(this);
+    }
+
+    componentDidMount() {
+        this.setState({
+            ...this.state,
+            date: this._initDate()
+        })
+    }
+
+    _initDate() {
+        const currentDate = new Date();
+        if (currentDate < this.minDate) return this.minDate;
+        return currentDate;
     }
 
     _filterDate(d) {
