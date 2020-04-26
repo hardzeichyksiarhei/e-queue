@@ -132,7 +132,7 @@ class ReservationForm extends Component {
     async handleSendClick(event) {
         event.preventDefault();
 
-        const { firstName, lastName, email, date, alert } = this.state;
+        const { firstName, lastName, email, date, isChecked, alert } = this.state;
 
         this.setState({ ...this.state, busy: true });
 
@@ -145,7 +145,8 @@ class ReservationForm extends Component {
                 firstName,
                 lastName,
                 email,
-                date: formatISO9075(date)
+                date: formatISO9075(date),
+                isChecked
             });
 
             if (status === 200) {
