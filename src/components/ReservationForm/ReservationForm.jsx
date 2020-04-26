@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles'
-import { Grid, FormControl, InputLabel, Input, Button, TextField, FormControlLabel, Checkbox, Typography, Collapse, IconButton } from '@material-ui/core';
+import { Grid, FormControl, InputLabel, Input, Button, TextField, FormControlLabel, Checkbox, Collapse, IconButton, CircularProgress } from '@material-ui/core';
 import { Alert } from '@material-ui/lab'
 import { DateRange, Schedule, Close } from '@material-ui/icons';
 
 import DatePicker from "react-datepicker";
-import { format } from 'date-fns';
+import { format, formatISO9075 } from 'date-fns';
+
 import ru from 'date-fns/locale/ru';
 
 import axios from 'axios';
@@ -24,23 +25,32 @@ class ReservationForm extends Component {
     constructor(props) {
         super(props);
 
-        this.minDate = new Date(2020, 4, 2, 9, 0);
-        this.maxDate = new Date(2020, 5, 2);
+        this.defaultMinDate = new Date(2020, 4, 2, 9, 0);
+        this.defaultMaxDate = new Date(2020, 5, 2);
+
+        this.defaultMinTime = new Date().setHours(9, 0, 0, 0);
+        this.defaultMaxTime = new Date().setHours(18, 45, 0, 0);
 
         this.state = {
             firstName: '',
             lastName: '',
             email: '',
-            isChecked: false,
             date: '',
-            minTime: new Date().setHours(9, 0, 0, 0),
-            maxTime: new Date().setHours(18, 45, 0, 0),
+
+            isChecked: false,
+
+            minTime: null,
+            maxTime: null,
+
+            busy: false,
             alert: {
                 open: false,
                 severity: 'info',
                 message: ''
             }
         };
+
+        this._refreshTime = this._refreshTime.bind(this);
 
         this.handleFirstNameChange = this.handleFirstNameChange.bind(this);
         this.handleLastNameChange = this.handleLastNameChange.bind(this);
@@ -56,24 +66,29 @@ class ReservationForm extends Component {
     componentDidMount() {
         this.setState({
             ...this.state,
-            date: this._initDate()
+            date: this._initDate(),
+
+            minTime: this.defaultMinTime,
+            maxTime: this.defaultMaxTime
+        }, () => {
+            this._refreshTime();
         })
     }
 
-    componentDidUpdate(){
+    _refreshTime() {
         const { date, maxTime } = this.state;
         const isSaturday = date.getDay() === 6;
-        const isDefaultMaxTime = new Date().setHours(18, 45, 0, 0) === maxTime
-        if(isSaturday && isDefaultMaxTime){
-            this.setState({...this.state, maxTime: new Date().setHours(17, 45, 0 ,0)})
-        } else if(!isSaturday && !isDefaultMaxTime){
-            this.setState({...this.state, maxTime: new Date().setHours(18, 45, 0, 0)})
+        const isDefaultMaxTime = this.defaultMaxTime === maxTime
+        if (isSaturday && isDefaultMaxTime) {
+            this.setState({ ...this.state, maxTime: new Date().setHours(17, 45, 0, 0) })
+        } else if (!isSaturday && !isDefaultMaxTime) {
+            this.setState({ ...this.state, maxTime: new Date().setHours(18, 45, 0, 0) })
         }
     }
 
     _initDate() {
         const currentDate = new Date();
-        if (currentDate < this.minDate) return this.minDate;
+        if (currentDate < this.defaultMinDate) return this.defaultMinDate;
         return currentDate;
     }
 
@@ -109,7 +124,9 @@ class ReservationForm extends Component {
     }
 
     handleDateChange(date) {
-        this.setState({ ...this.state, date });
+        this.setState({ ...this.state, date }, () => {
+            this._refreshTime();
+        });
     }
 
     async handleSendClick(event) {
@@ -117,15 +134,18 @@ class ReservationForm extends Component {
 
         const { firstName, lastName, email, date, alert } = this.state;
 
+        this.setState({ ...this.state, busy: true });
+
         let severity = 'success';
         let message = 'Успех!';
         let refreshForm = true;
+
         try {
             const { data, status } = await axios.post('https://equeue-bspu.herokuapp.com/api/graduates', {
                 firstName,
                 lastName,
                 email,
-                date
+                date: formatISO9075(date)
             });
 
             if (status === 200) {
@@ -141,7 +161,8 @@ class ReservationForm extends Component {
                 firstName: refreshForm ? '' : firstName,
                 lastName: refreshForm ? '' : lastName,
                 email: refreshForm ? '' : email,
-                date: refreshForm ? '' : date,
+                date: refreshForm ? this._initDate() : date,
+                isChecked: false,
                 alert: {
                     ...alert,
                     open: true,
@@ -150,6 +171,8 @@ class ReservationForm extends Component {
                 }
             })
         } catch (error) { console.error(error) }
+
+        this.setState({ ...this.state, busy: false });
     }
 
     render() {
@@ -204,14 +227,14 @@ class ReservationForm extends Component {
                                             <DateRange />&nbsp;&nbsp;|&nbsp;&nbsp;<Schedule />
                                         </Button>
                                     </Grid>
-                                    
+
                                 </Grid>
                             }
                             locale={ru}
                             selected={this.state.date}
                             onChange={this.handleDateChange}
-                            minDate={this.minDate}
-                            maxDate={this.maxDate}
+                            minDate={this.defaultMinDate}
+                            maxDate={this.defaultMaxDate}
                             minTime={this.state.minTime}
                             maxTime={this.state.maxTime}
                             showTimeSelect
@@ -227,6 +250,7 @@ class ReservationForm extends Component {
 
                     <Grid item xs={12} className={classes.checkedWrapper}>
                         <FormControlLabel
+                            className="checkbox-control"
                             control={
                                 <Checkbox
                                     checked={this.state.isChecked}
@@ -239,11 +263,11 @@ class ReservationForm extends Component {
                         />
                     </Grid>
 
-                    <Grid item xs={12}>
-                        {/* <Typography>* Мы не производим сбор Ваших данных</Typography> */}
-                        <Button size="large" variant="contained" color="primary" type="submit" disabled={!this.state.isChecked}>
+                    <Grid item xs={12} className="submit-wrapper">
+                        <Button size="large" variant="contained" color="primary" type="submit" disabled={!this.state.isChecked || this.state.busy}>
                             Забронировать
                         </Button>
+                        {(this.state.busy) ? <CircularProgress className="submit-loading" /> : ''}
                     </Grid>
                 </Grid>
                 <Collapse in={this.state.alert.open}>
