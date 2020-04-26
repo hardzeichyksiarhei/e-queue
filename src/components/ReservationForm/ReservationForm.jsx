@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles'
-import { Grid, FormControl, InputLabel, Input, Button, TextField, FormControlLabel, Checkbox, Collapse, IconButton, CircularProgress } from '@material-ui/core';
+import { Grid, FormControl, InputLabel, Input, Button, TextField, FormControlLabel, Checkbox, Collapse, IconButton, CircularProgress, Modal , Backdrop, Fade  } from '@material-ui/core';
 import { Alert } from '@material-ui/lab'
 import { DateRange, Schedule, Close } from '@material-ui/icons';
 
@@ -18,7 +18,19 @@ const styles = theme => ({
     checkedWrapper: {
         paddingTop: '0 !important',
         paddingBottom: '0 !important'
-    }
+    },
+    modal: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+      },
+      paper: {
+        backgroundColor: '#4caf50',
+        boxShadow: theme.shadows[5],
+        padding: theme.spacing(2, 4, 3),
+        color: 'white',
+        'border-radius': '5px'
+      },
 })
 
 class ReservationForm extends Component {
@@ -79,7 +91,7 @@ class ReservationForm extends Component {
         if (nextState.alert.open === true && nextState.alert.severity === 'success') {
             setTimeout(() => {
                 this.setState({ ...this.state, alert: this._defaultAlert() })
-            }, 2000)
+            }, 5000)
         }
     }
 
@@ -213,7 +225,7 @@ class ReservationForm extends Component {
                     <Grid item xs={12}>
                         <FormControl fullWidth>
                             <InputLabel htmlFor="e-mail" required>E-mail</InputLabel>
-                            <Input id="e-mail" fullWidth value={this.state.email} onChange={this.handleEmailChange} placeholder="example@gmail.com" required />
+                            <Input id="e-mail" fullWidth value={this.state.email} onChange={this.handleEmailChange} placeholder="example@gmail.com" type='email' required />
                         </FormControl>
                     </Grid>
 
@@ -285,7 +297,7 @@ class ReservationForm extends Component {
                         {(this.state.busy) ? <CircularProgress className="submit-loading" /> : ''}
                     </Grid>
                 </Grid>
-                <Collapse in={this.state.alert.open}>
+                <Collapse in={this.state.alert.open && this.state.alert.severity !== 'success'}>
                     <Alert
                         className="reservation-alert"
                         variant="filled"
@@ -304,6 +316,27 @@ class ReservationForm extends Component {
                         {this.state.alert.message}
                     </Alert>
                 </Collapse>
+                <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        className={classes.modal}
+        open={this.state.alert.open && this.state.alert.severity === 'success'}
+        onClose={()=>{
+            this.setState({ ...this.state, alert: {open: false} })
+        }}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Fade in={this.state.alert.open}>
+          <div className={classes.paper}>
+            <h2 id="transition-modal-title">{this.state.alert.message}</h2>
+            <p id="transition-modal-description">Приходите на регистрацию в назначеное время!</p>
+          </div>
+        </Fade>
+      </Modal>
             </form>
         );
     }
