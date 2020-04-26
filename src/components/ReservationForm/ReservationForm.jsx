@@ -136,12 +136,8 @@ class ReservationForm extends Component {
 
         this.setState({ ...this.state, busy: true });
 
-        let severity = 'success';
-        let message = 'Успех!';
-        let refreshForm = true;
-
         try {
-            const { data, status } = await axios.post('https://equeue-bspu.herokuapp.com/api/graduates', {
+            const { data: { message }, status } = await axios.post('https://equeue-bspu.herokuapp.com/api/graduates', {
                 firstName,
                 lastName,
                 email,
@@ -150,30 +146,37 @@ class ReservationForm extends Component {
             });
 
             if (status === 200) {
-                message = data.message;
-            } else {
-                severity = 'error';
-                message = 'Ошибка';
-                refreshForm = false;
+                this.setState({
+                    ...this.state,
+                    firstName: '',
+                    lastName: '',
+                    email: '',
+                    date: this._initDate(),
+                    isChecked: false,
+                    busy: false,
+                    alert: {
+                        ...alert,
+                        open: true,
+                        severity: 'success',
+                        message
+                    }
+                });
             }
-
-            this.setState({
-                ...this.state,
-                firstName: refreshForm ? '' : firstName,
-                lastName: refreshForm ? '' : lastName,
-                email: refreshForm ? '' : email,
-                date: refreshForm ? this._initDate() : date,
-                isChecked: false,
-                alert: {
-                    ...alert,
-                    open: true,
-                    severity,
-                    message
-                }
-            })
-        } catch (error) { console.error(error) }
-
-        this.setState({ ...this.state, busy: false });
+        } catch (error) {
+            const { data: { message }, status } = error.response;
+            if (message && status >= 400) {
+                this.setState({
+                    ...this.state,
+                    busy: false,
+                    alert: {
+                        ...alert,
+                        open: true,
+                        severity: 'error',
+                        message
+                    }
+                });
+            }
+        }
     }
 
     render() {
