@@ -1,6 +1,22 @@
 import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles'
-import { Grid, FormControl, InputLabel, Input, Button, TextField, FormControlLabel, Checkbox, Collapse, IconButton, CircularProgress, Modal, Backdrop, Fade, Typography } from '@material-ui/core';
+import { 
+    Grid,
+    FormControl,
+    InputLabel,
+    Input,
+    Button,
+    TextField,
+    FormControlLabel,
+    Checkbox,
+    Collapse,
+    IconButton,
+    CircularProgress,
+    Modal,
+    Backdrop,
+    Fade,
+    Typography
+ } from '@material-ui/core';
 import { Alert } from '@material-ui/lab'
 import { DateRange, Schedule, Close } from '@material-ui/icons';
 
@@ -60,7 +76,7 @@ class QueueReservationForm extends Component {
             busy: false,
             alert: {
                 open: false,
-                severity: 'info',
+                severity: 'success',
                 message: ''
             }
         };
@@ -180,14 +196,13 @@ class QueueReservationForm extends Component {
                     isChecked: false,
                     busy: false,
                     alert: {
-                        ...alert,
                         open: true,
                         severity: 'success',
                         message
                     }
                 }, () => {
                     setTimeout(() => {
-                        this.setState({ ...this.state, alert: this._defaultAlert() })
+                        this.setState({ ...this.state, alert: { ...this.state.alert, open: false } })
                     }, 4000)
                 });
             }
@@ -198,7 +213,6 @@ class QueueReservationForm extends Component {
                     ...this.state,
                     busy: false,
                     alert: {
-                        ...alert,
                         open: true,
                         severity: 'error',
                         message
@@ -327,14 +341,14 @@ class QueueReservationForm extends Component {
                     aria-describedby="transition-modal-description"
                     className={classes.modal}
                     open={this.state.alert.open && this.state.alert.severity === 'success'}
-                    onClose={() => this.setState({ ...this.state, alert: { ...this._defaultAlert() } })}
+                    onClose={() => { this.setState({ ...this.state, alert: { ...this.state.alert, open: false } }) }}
                     closeAfterTransition
                     BackdropComponent={Backdrop}
                     BackdropProps={{
-                        timeout: 500,
+                        transitionDuration: 400,
                     }}
                 >
-                    <Fade in={this.state.alert.open && this.state.alert.severity === 'success'}>
+                    <Fade in={this.state.alert.open && this.state.alert.severity === 'success'} timeout={400}>
                         <div className={classes.paper}>
                             <Typography variant="h4" id="transition-modal-title">{this.state.alert.message}</Typography>
                             <Typography id="transition-modal-description">Приходите на регистрацию в назначеное время!</Typography>
