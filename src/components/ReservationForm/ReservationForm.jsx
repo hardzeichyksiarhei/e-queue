@@ -75,6 +75,17 @@ class ReservationForm extends Component {
         })
     }
 
+    componentWillUpdate(nextProps, nextState) {
+        if (nextState.alert.open === true && nextState.alert.severity === 'success') {
+            setTimeout(() => {
+                this.setState({ ...this.state, alert: this._defaultAlert() })
+            }, 2000)
+        }
+    }
+
+
+    /* Methods */
+
     _refreshTime() {
         const { date, maxTime } = this.state;
         const isSaturday = date.getDay() === 6;
