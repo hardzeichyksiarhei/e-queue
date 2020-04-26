@@ -12,7 +12,7 @@ import ru from 'date-fns/locale/ru';
 import axios from 'axios';
 
 import "react-datepicker/dist/react-datepicker.css";
-import './ReservationForm.sass';
+import './QueueReservationForm.sass';
 
 const styles = theme => ({
     checkedWrapper: {
@@ -33,7 +33,7 @@ const styles = theme => ({
       },
 })
 
-class ReservationForm extends Component {
+class QueueReservationForm extends Component {
     constructor(props) {
         super(props);
 
@@ -87,13 +87,13 @@ class ReservationForm extends Component {
         })
     }
 
-    componentWillUpdate(nextProps, nextState) {
+    /*componentWillUpdate(nextProps, nextState) {
         if (nextState.alert.open === true && nextState.alert.severity === 'success') {
             setTimeout(() => {
                 this.setState({ ...this.state, alert: this._defaultAlert() })
             }, 5000)
         }
-    }
+    }*/
 
 
     /* Methods */
@@ -125,7 +125,6 @@ class ReservationForm extends Component {
     _defaultAlert() {
         return {
             open: false,
-            severity: 'info',
             message: ''
         }
     }
@@ -183,6 +182,10 @@ class ReservationForm extends Component {
                         severity: 'success',
                         message
                     }
+                }, () => {
+                    setTimeout(() => {
+                        this.setState({ ...this.state, alert: this._defaultAlert() })
+                    }, 3000)
                 });
             }
         } catch (error) {
@@ -342,4 +345,4 @@ class ReservationForm extends Component {
     }
 }
 
-export default withStyles(styles)(ReservationForm);
+export default withStyles(styles)(QueueReservationForm);

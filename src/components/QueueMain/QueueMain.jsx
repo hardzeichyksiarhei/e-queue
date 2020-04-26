@@ -2,12 +2,12 @@ import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import { Grid, Typography } from '@material-ui/core';
 
-import ReservationForm from '../ReservationForm/ReservationForm';
+import ReservationForm from '../QueueReservationForm/QueueReservationForm';
 import ImageMask from './../../img/image_mask.png'
 
-import './Main.sass'
+import './QueueMain.sass'
 
-function Main() {
+function QueueMain() {
   return (
     <div className="Main">
       <Grid container spacing={3}>
@@ -25,4 +25,4 @@ function Main() {
   );
 }
 
-export default Main;
+export default QueueMain;
