@@ -71,7 +71,7 @@ class ReservationForm extends Component {
         const month = d.getMonth();
         const date = d.getDate();
         return (day !== 0 && day !== 6) || (month === 4 && (date === 2 || date === 30));
-    };
+    }
 
     _defaultAlert() {
         return {
