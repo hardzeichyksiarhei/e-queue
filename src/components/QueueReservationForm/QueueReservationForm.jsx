@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles'
-import { Grid, FormControl, InputLabel, Input, Button, TextField, FormControlLabel, Checkbox, Collapse, IconButton, CircularProgress, Modal , Backdrop, Fade  } from '@material-ui/core';
+import { Grid, FormControl, InputLabel, Input, Button, TextField, FormControlLabel, Checkbox, Collapse, IconButton, CircularProgress, Modal, Backdrop, Fade, Typography } from '@material-ui/core';
 import { Alert } from '@material-ui/lab'
 import { DateRange, Schedule, Close } from '@material-ui/icons';
 
@@ -23,14 +23,17 @@ const styles = theme => ({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-      },
-      paper: {
+    },
+    paper: {
         backgroundColor: '#4caf50',
         boxShadow: theme.shadows[5],
         padding: theme.spacing(2, 4, 3),
         color: 'white',
-        'border-radius': '5px'
-      },
+        borderRadius: '5px',
+        '&:focus': {
+            outline: 'none'
+        }
+    },
 })
 
 class QueueReservationForm extends Component {
@@ -185,7 +188,7 @@ class QueueReservationForm extends Component {
                 }, () => {
                     setTimeout(() => {
                         this.setState({ ...this.state, alert: this._defaultAlert() })
-                    }, 3000)
+                    }, 4000)
                 });
             }
         } catch (error) {
@@ -320,26 +323,24 @@ class QueueReservationForm extends Component {
                     </Alert>
                 </Collapse>
                 <Modal
-        aria-labelledby="transition-modal-title"
-        aria-describedby="transition-modal-description"
-        className={classes.modal}
-        open={this.state.alert.open && this.state.alert.severity === 'success'}
-        onClose={()=>{
-            this.setState({ ...this.state, alert: {open: false} })
-        }}
-        closeAfterTransition
-        BackdropComponent={Backdrop}
-        BackdropProps={{
-          timeout: 500,
-        }}
-      >
-        <Fade in={this.state.alert.open}>
-          <div className={classes.paper}>
-            <h2 id="transition-modal-title">{this.state.alert.message}</h2>
-            <p id="transition-modal-description">Приходите на регистрацию в назначеное время!</p>
-          </div>
-        </Fade>
-      </Modal>
+                    aria-labelledby="transition-modal-title"
+                    aria-describedby="transition-modal-description"
+                    className={classes.modal}
+                    open={this.state.alert.open && this.state.alert.severity === 'success'}
+                    onClose={() => this.setState({ ...this.state, alert: { ...this._defaultAlert() } })}
+                    closeAfterTransition
+                    BackdropComponent={Backdrop}
+                    BackdropProps={{
+                        timeout: 500,
+                    }}
+                >
+                    <Fade in={this.state.alert.open && this.state.alert.severity === 'success'}>
+                        <div className={classes.paper}>
+                            <Typography variant="h4" id="transition-modal-title">{this.state.alert.message}</Typography>
+                            <Typography id="transition-modal-description">Приходите на регистрацию в назначеное время!</Typography>
+                        </div>
+                    </Fade>
+                </Modal>
             </form>
         );
     }
