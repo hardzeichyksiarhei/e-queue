@@ -189,10 +189,10 @@ class QueueReservationForm extends Component {
             if (status === 200) {
                 this.setState({
                     ...this.state,
-                    firstName: '',
-                    lastName: '',
-                    email: '',
-                    date: this._initDate(),
+                    // firstName: '',
+                    // lastName: '',
+                    // email: '',
+                    // date: this._initDate(),
                     isChecked: false,
                     busy: false,
                     alert: {
