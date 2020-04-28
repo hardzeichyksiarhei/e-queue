@@ -303,7 +303,7 @@ class QueueReservationForm extends Component {
                             minTime={this.state.minTime}
                             maxTime={this.state.maxTime}
                             showTimeSelect
-                            timeIntervals={15}
+                            timeIntervals={60}
                             timeFormat="p"
                             dateFormat="dd.MM.yyyy HH:mm"
                             timeCaption="Время"
