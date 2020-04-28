@@ -229,24 +229,42 @@ class QueueReservationForm extends Component {
             <form autoComplete="off" onSubmit={this.handleSendClick}>
                 <Grid container spacing={3}>
                     <Grid item xs={12}>
-                        <FormControl fullWidth>
-                            <InputLabel htmlFor="first-name" required>Имя</InputLabel>
-                            <Input id="first-name" fullWidth value={this.state.firstName} onChange={this.handleFirstNameChange} placeholder="Сергей" required />
-                        </FormControl>
+                        <TextField
+                            id="first-name"
+                            variant="outlined"
+                            fullWidth
+                            value={this.state.firstName}
+                            onChange={this.handleFirstNameChange}
+                            placeholder="Иван"
+                            label="Имя"
+                            required
+                        />
                     </Grid>
 
                     <Grid item xs={12}>
-                        <FormControl fullWidth>
-                            <InputLabel htmlFor="last-name" required>Фамилия</InputLabel>
-                            <Input id="last-name" fullWidth value={this.state.lastName} onChange={this.handleLastNameChange} placeholder="Гардейчик" required />
-                        </FormControl>
+                        <TextField
+                            id="last-name"
+                            variant="outlined"
+                            fullWidth
+                            value={this.state.lastName}
+                            onChange={this.handleLastNameChange}
+                            placeholder="Иванов"
+                            label="Фамилия"
+                            required
+                        />
                     </Grid>
 
                     <Grid item xs={12}>
-                        <FormControl fullWidth>
-                            <InputLabel htmlFor="e-mail" required>E-mail</InputLabel>
-                            <Input id="e-mail" fullWidth value={this.state.email} onChange={this.handleEmailChange} placeholder="example@gmail.com" type='email' required />
-                        </FormControl>
+                        <TextField
+                            id="e-mail"
+                            variant="outlined"
+                            fullWidth
+                            value={this.state.email}
+                            onChange={this.handleEmailChange}
+                            placeholder="example@gmail.com"
+                            label="E-mail"
+                            required
+                        />
                     </Grid>
 
                     <Grid item xs={12}>
