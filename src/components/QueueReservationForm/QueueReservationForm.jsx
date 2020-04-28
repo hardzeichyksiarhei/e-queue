@@ -2,9 +2,6 @@ import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles'
 import {
     Grid,
-    FormControl,
-    InputLabel,
-    Input,
     Button,
     TextField,
     FormControlLabel,
@@ -78,10 +75,13 @@ class QueueReservationForm extends Component {
                 open: false,
                 severity: 'success',
                 message: ''
-            }
+            },
+
+            closedDates: []
         };
 
         this._refreshTime = this._refreshTime.bind(this);
+        this._filterDate = this._filterDate.bind(this);
 
         this.handleFirstNameChange = this.handleFirstNameChange.bind(this);
         this.handleLastNameChange = this.handleLastNameChange.bind(this);
@@ -94,28 +94,30 @@ class QueueReservationForm extends Component {
         this.handleSendClick = this.handleSendClick.bind(this);
     }
 
-    componentDidMount() {
+    async componentDidMount() {
+        const closedDates = await this._fetchClosedDates();
+
         this.setState({
             ...this.state,
             date: this._initDate(),
 
             minTime: this.defaultMinTime,
-            maxTime: this.defaultMaxTime
-        }, () => {
-            this._refreshTime();
-        })
+            maxTime: this.defaultMaxTime,
+            
+            closedDates
+        }, () => { this._refreshTime(); });
     }
-
-    /*componentWillUpdate(nextProps, nextState) {
-        if (nextState.alert.open === true && nextState.alert.severity === 'success') {
-            setTimeout(() => {
-                this.setState({ ...this.state, alert: this._defaultAlert() })
-            }, 5000)
-        }
-    }*/
 
 
     /* Methods */
+
+    async _fetchClosedDates() {
+        return [
+            new Date(2020, 4, 12).getTime(),
+            new Date(2020, 4, 19).getTime(),
+            new Date(2020, 4, 26).getTime()
+        ]
+    }
 
     _refreshTime() {
         const { date, maxTime } = this.state;
@@ -138,7 +140,8 @@ class QueueReservationForm extends Component {
         const day = d.getDay();
         const month = d.getMonth();
         const date = d.getDate();
-        return (day !== 0 && day !== 6) || (month === 4 && (date === 2 || date === 30));
+        return (day !== 0 && day !== 6 && !this.state.closedDates.includes(d.getTime())) 
+                || (month === 4 && (date === 2 || date === 30))
     }
 
     _defaultAlert() {
@@ -345,7 +348,14 @@ class QueueReservationForm extends Component {
                                 aria-label="close"
                                 color="inherit"
                                 size="small"
-                                onClick={() => this.setState({ ...this.state, alert: { ...this._defaultAlert() } })}
+                                onClick={() => this.setState({
+                                    ...this.state,
+                                    alert: {
+                                        ...this.state.alert,
+                                        open: false,
+                                        message: ''
+                                    }
+                                })}
                             >
                                 <Close fontSize="inherit" />
                             </IconButton>
