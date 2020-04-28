@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles'
-import { 
+import {
     Grid,
     FormControl,
     InputLabel,
@@ -57,7 +57,7 @@ class QueueReservationForm extends Component {
         super(props);
 
         this.defaultMinDate = new Date(2020, 4, 2, 9, 0);
-        this.defaultMaxDate = new Date(2020, 5, 2);
+        this.defaultMaxDate = new Date(2020, 5, 1);
 
         this.defaultMinTime = new Date().setHours(9, 0, 0, 0);
         this.defaultMaxTime = new Date().setHours(18, 45, 0, 0);
