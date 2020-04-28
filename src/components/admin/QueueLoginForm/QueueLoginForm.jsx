@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Grid, TextField, Button } from '@material-ui/core';
 
+import { withRouter } from 'react-router-dom'
+
 class QueueLoginForm extends Component {
     constructor(props) {
         super(props);
@@ -25,7 +27,10 @@ class QueueLoginForm extends Component {
     }
 
     async handleSendClick(event) {
-        console.log(this.state)
+        const { history: { push } } = this.props;
+        localStorage.setItem('token', '123');
+
+        push('/dashboard');
     }
 
     render() {
@@ -65,4 +70,4 @@ class QueueLoginForm extends Component {
     }
 }
 
-export default QueueLoginForm;
+export default withRouter(QueueLoginForm);
