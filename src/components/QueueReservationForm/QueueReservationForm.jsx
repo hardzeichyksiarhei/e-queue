@@ -144,13 +144,6 @@ class QueueReservationForm extends Component {
                 || (month === 4 && (date === 2 || date === 30))
     }
 
-    _defaultAlert() {
-        return {
-            open: false,
-            message: ''
-        }
-    }
-
     handleLastNameChange(event) {
         this.setState({ ...this.state, lastName: event.target.value });
     }
@@ -192,10 +185,6 @@ class QueueReservationForm extends Component {
             if (status === 200) {
                 this.setState({
                     ...this.state,
-                    // firstName: '',
-                    // lastName: '',
-                    // email: '',
-                    // date: this._initDate(),
                     isChecked: false,
                     busy: false,
                     alert: {
