@@ -254,7 +254,7 @@ class QueueReservationForm extends Component {
                             className="date-range"
                             customInput={
                                 <Grid container spacing={2}>
-                                    <Grid item xs={9}>
+                                    <Grid item lg={9} md={9} xs={12}>
                                         <div className="date-wrapper">
                                             <TextField
                                                 id="date"
@@ -269,7 +269,7 @@ class QueueReservationForm extends Component {
                                             />
                                         </div>
                                     </Grid>
-                                    <Grid item xs={3}>
+                                    <Grid item lg={3} md={3} xs={12}>
                                         <Button className="date-range-btn" fullWidth size="large" variant="contained" color="secondary">
                                             <DateRange />&nbsp;&nbsp;|&nbsp;&nbsp;<Schedule />
                                         </Button>

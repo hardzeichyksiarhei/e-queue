@@ -2,9 +2,16 @@
     &__copyright
         padding: 10px
         display: flex
+        flex-direction: column
         align-items: center
-        justify-content: center
         font-size: 14px
         img
             display: block
-            margin-right: 10px
+            max-width: 60px
+            height: auto
+            margin-bottom: 20px
+
+@media (max-width: 576px)
+    .app-footer
+        &__copyright
+            text-align: center
