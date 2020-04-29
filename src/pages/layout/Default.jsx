@@ -1,6 +1,7 @@
 import React from 'react';
-import { AppBar, Toolbar, Typography, Container, Paper } from '@material-ui/core';
+import { AppBar, Toolbar, Typography, Container, Paper, Fab } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import { ExitToApp } from '@material-ui/icons';
 
 import QueueFooter from '../../components/QueueFooter/QueueFooter';
 
@@ -16,8 +17,15 @@ const useStyles = makeStyles(theme => ({
     }
   }))
 
-function Default({ children, title, paperSize }) {
+
+
+function Default({ children, title, paperSize, history }) {
     const classes = useStyles();
+
+    function logout() {
+        localStorage.removeItem('token');
+        history.push('/login');
+    }
 
     return (
         <div className="default-layout">
@@ -25,7 +33,7 @@ function Default({ children, title, paperSize }) {
                 <Toolbar>
                     <Typography variant="h6" className={classes.title} align="center">
                         Регистрация на ЦТ* — онлайн очередь
-            </Typography>
+                </Typography>
                 </Toolbar>
             </AppBar>
             <Container className="app-content" maxWidth={paperSize || 'lg'}>
@@ -34,6 +42,10 @@ function Default({ children, title, paperSize }) {
                 </Paper>
             </Container>
             <QueueFooter />
+
+            { localStorage.getItem('token') ? <Fab className="logout" color="secondary" onClick={logout}>
+                <ExitToApp />
+            </Fab> : '' }
         </div>
     );
 }

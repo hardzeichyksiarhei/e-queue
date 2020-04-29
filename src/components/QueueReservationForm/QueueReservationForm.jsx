@@ -112,11 +112,8 @@ class QueueReservationForm extends Component {
     /* Methods */
 
     async _fetchClosedDates() {
-        return [
-            new Date(2020, 4, 12).getTime(),
-            new Date(2020, 4, 19).getTime(),
-            new Date(2020, 4, 26).getTime()
-        ]
+        const { data, status } = await axios.get('https://equeue-bspu.herokuapp.com/api/closed-dates');
+        return status === 200 ? data.map(d => new Date(d).setHours(0)) : [];
     }
 
     _refreshTime() {

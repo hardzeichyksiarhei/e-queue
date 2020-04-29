@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Grid, TextField, Button } from '@material-ui/core';
 
 import { withRouter } from 'react-router-dom'
+import axios from 'axios';
 
 class QueueLoginForm extends Component {
     constructor(props) {
@@ -28,9 +29,18 @@ class QueueLoginForm extends Component {
 
     async handleSendClick(event) {
         const { history } = this.props;
-        localStorage.setItem('token', '123');
+        const { login, password } = this.state;
 
-        history.push('/dashboard');
+        try {
+            const { data, status } = await axios.post('https://equeue-bspu.herokuapp.com/admin/login', {
+                username: login, password
+            })
+
+            if (status === 200 && data.access_token) {
+                localStorage.setItem('token', data.access_token);
+                history.push('/dashboard');
+            }
+        } catch(e) { console.log(e); }
     }
 
     render() {

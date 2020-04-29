@@ -40,12 +40,20 @@ function RouteWrapper({
   ...rest
 }) {
   return (
-    <Route {...rest} render={(props) => {
-      /*console.log(rest)
-      if (rest.name === 'login' && localStorage.getItem('token'))
-        return <Redirect to='/dashboard' />*/
+    <Route {...rest} render={(props) => <Layout {...props}>
+      <Component {...props} />
+    </Layout>} />
+  );
+}
 
-      if (rest.isAuth === undefined || rest.isAuth)
+function PrivateRouter({
+  component: Component,
+  layout: Layout,
+  ...rest
+}) {
+  return (
+    <Route {...rest} render={(props) => {
+      if (localStorage.getItem('token'))
         return <Layout {...props}>
           <Component {...props} />
         </Layout>
@@ -62,7 +70,7 @@ function App() {
         <Router>
           <Switch>
             <RouteWrapper name="login" path="/login" component={AdminLogin} layout={(props) => <Default {...props} paperSize={'sm'} />} />
-            <RouteWrapper isAuth={!!localStorage.getItem('token')} name="dashboard" path="/dashboard" component={AdminDashboard} layout={(props) => <Default {...props} paperSize={'xl'} />} />
+            <PrivateRouter name="dashboard" path="/dashboard" component={AdminDashboard} layout={(props) => <Default {...props} paperSize={'xl'} />} />
             <RouteWrapper name="home" path="/" component={Home} layout={Default} />
           </Switch>
         </Router>
