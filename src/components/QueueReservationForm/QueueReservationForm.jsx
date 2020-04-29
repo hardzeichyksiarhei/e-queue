@@ -119,6 +119,7 @@ class QueueReservationForm extends Component {
 
     async _fetchClosedDates() {
         const { data, status } = await axios.get('https://equeue-bspu.herokuapp.com/api/closed-dates');
+        console.log(data)
         return status === 200 ? data.map(d => new Date(d).setHours(0)) : [];
     }
 
@@ -143,8 +144,9 @@ class QueueReservationForm extends Component {
         const day = d.getDay();
         const month = d.getMonth();
         const date = d.getDate();
-        return (day !== 0 && day !== 6 && !this.state.closedDates.includes(d.getTime()))
-            || (month === 4 && (date === 2 || date === 30))
+        const isCloseDay = this.state.closedDates.includes(d.getTime());
+        return (day !== 0 && day !== 6 && !isCloseDay)
+            || (!isCloseDay && month === 4 && (date === 2 || date === 30))
     }
 
     handleLastNameChange(event) {
