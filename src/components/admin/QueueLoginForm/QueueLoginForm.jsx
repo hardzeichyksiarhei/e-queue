@@ -27,10 +27,10 @@ class QueueLoginForm extends Component {
     }
 
     async handleSendClick(event) {
-        const { history: { push } } = this.props;
+        const { history } = this.props;
         localStorage.setItem('token', '123');
 
-        push('/dashboard');
+        history.push('/dashboard');
     }
 
     render() {
