@@ -18,7 +18,7 @@ import { Alert } from '@material-ui/lab'
 import { DateRange, Schedule, Close } from '@material-ui/icons';
 
 import DatePicker from "react-datepicker";
-import { format, formatISO9075 } from 'date-fns';
+import { format, formatISO9075, eachDayOfInterval } from 'date-fns';
 
 import ru from 'date-fns/locale/ru';
 
@@ -105,13 +105,12 @@ class QueueReservationForm extends Component {
 
         this.setState({
             ...this.state,
-            date: this._initDate(),
 
             minTime: this.defaultMinTime,
             maxTime: this.defaultMaxTime,
 
             closedDates
-        }, () => { this._refreshTime(); });
+        }, () => { this._initDate(); });
     }
 
 
@@ -119,7 +118,6 @@ class QueueReservationForm extends Component {
 
     async _fetchClosedDates() {
         const { data, status } = await axios.get('https://equeue-bspu.herokuapp.com/api/closed-dates');
-        console.log(data)
         return status === 200 ? data.map(d => new Date(d).setHours(0)) : [];
     }
 
@@ -135,9 +133,18 @@ class QueueReservationForm extends Component {
     }
 
     _initDate() {
-        const currentDate = new Date();
-        if (currentDate < this.defaultMinDate) return this.defaultMinDate;
-        return currentDate;
+        const allDates = eachDayOfInterval({
+            start: this.defaultMinDate, 
+            end: this.defaultMaxDate
+        });
+        
+        const currentDate = allDates.find(d => this._filterDate(d));
+        currentDate.setHours(9);
+        
+        this.setState({
+            ...this.state,
+            date: currentDate
+        }, () => { this._refreshTime(); })
     }
 
     _filterDate(d) {
