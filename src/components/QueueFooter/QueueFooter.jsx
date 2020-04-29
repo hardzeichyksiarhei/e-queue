@@ -10,7 +10,7 @@ function QueueFooter() {
     <div className="app-footer">
         <div className="app-footer__copyright">
             <a href="https://bspu.by/" target="_blank"><img src={BSPU} alt="BSPU"/></a>
-            <Typography>(с) { new Date().getFullYear() }, Учреждение образования «Белорусский государственный педагогический университет имени Максима Танка»</Typography>
+            <Typography>(с) { new Date().getFullYear() }, Учреждение образования «<a className="link" href="https://bspu.by/" target="_blank">Белорусский государственный педагогический университет имени Максима Танка</a>»</Typography>
         </div>
     </div>
   );

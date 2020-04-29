@@ -13,7 +13,7 @@ import {
     Backdrop,
     Fade,
     Typography
- } from '@material-ui/core';
+} from '@material-ui/core';
 import { Alert } from '@material-ui/lab'
 import { DateRange, Schedule, Close } from '@material-ui/icons';
 
@@ -35,9 +35,15 @@ const styles = theme => ({
     modal: {
         display: 'flex',
         alignItems: 'center',
-        justifyContent: 'center',
+        justifyContent: 'center'
+    },
+    close: {
+        position: 'absolute',
+        top: '10px',
+        right: '10px'
     },
     paper: {
+        position: 'relative',
         backgroundColor: '#4caf50',
         boxShadow: theme.shadows[5],
         padding: theme.spacing(2, 4, 3),
@@ -103,7 +109,7 @@ class QueueReservationForm extends Component {
 
             minTime: this.defaultMinTime,
             maxTime: this.defaultMaxTime,
-            
+
             closedDates
         }, () => { this._refreshTime(); });
     }
@@ -137,8 +143,8 @@ class QueueReservationForm extends Component {
         const day = d.getDay();
         const month = d.getMonth();
         const date = d.getDate();
-        return (day !== 0 && day !== 6 && !this.state.closedDates.includes(d.getTime())) 
-                || (month === 4 && (date === 2 || date === 30))
+        return (day !== 0 && day !== 6 && !this.state.closedDates.includes(d.getTime()))
+            || (month === 4 && (date === 2 || date === 30))
     }
 
     handleLastNameChange(event) {
@@ -189,10 +195,6 @@ class QueueReservationForm extends Component {
                         severity: 'success',
                         message
                     }
-                }, () => {
-                    setTimeout(() => {
-                        this.setState({ ...this.state, alert: { ...this.state.alert, open: false } })
-                    }, 4000)
                 });
             }
         } catch (error) {
@@ -364,6 +366,15 @@ class QueueReservationForm extends Component {
                 >
                     <Fade in={this.state.alert.open && this.state.alert.severity === 'success'} timeout={400}>
                         <div className={classes.paper}>
+                            <IconButton
+                                className={classes.close}
+                                aria-label="close"
+                                color="inherit"
+                                size="small"
+                                onClick={() => this.setState({ ...this.state, alert: { ...this.state.alert, open: false } })}
+                            >
+                                <Close fontSize="inherit" />
+                            </IconButton>
                             <Typography variant="h4" id="transition-modal-title">{this.state.alert.message}</Typography>
                             <Typography id="transition-modal-description">Приходите на регистрацию в назначеное время!</Typography>
                         </div>
