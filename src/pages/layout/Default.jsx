@@ -54,6 +54,4 @@ function Default({ children, paperSize, dispatch, history }) {
     );
 }
 
-const mapStateToProps = state => ({})
-
-export default connect(mapStateToProps)(Default);
+export default connect()(Default);
