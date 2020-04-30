@@ -1,8 +1,8 @@
 import * as actions from '../actions/authActions'
 
 export const initialState = {
-    authUser: null,
-    token: null,
+    user: null,
+    token: localStorage.getItem('token'),
     loading: false,
     hasErrors: false
 }
@@ -16,7 +16,7 @@ export default function authReducer(state = initialState, action) {
             };
         case actions.LOGIN_SUCCESS:
             return {
-                authUser: action.payload.user,
+                user: action.payload.user,
                 token: action.payload.token,
                 loading: false,
                 hasErrors: false
@@ -29,7 +29,7 @@ export default function authReducer(state = initialState, action) {
             };
         case actions.LOGOUT_REQUEST:
             return {
-                authUser: null,
+                user: null,
                 token: null,
                 loading: false
             };

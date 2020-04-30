@@ -78,7 +78,7 @@ class QueueLoginForm extends Component {
 }
 
 const mapStateToProps = state => ({
-    authUser: state.auth.authUser,
+    auth: state.auth.authUser,
     token: state.auth.token,
     hasErrors: state.auth.hasErrors,
 })
