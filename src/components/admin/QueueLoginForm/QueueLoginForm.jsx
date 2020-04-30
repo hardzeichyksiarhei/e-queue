@@ -2,14 +2,16 @@ import React, { Component } from 'react';
 import { Grid, TextField, Button } from '@material-ui/core';
 
 import { withRouter } from 'react-router-dom'
-import axios from 'axios';
+import { connect } from 'react-redux'
+
+import { login } from '../../../store/actions/authActions'
 
 class QueueLoginForm extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            login: '',
+            username: '',
             password: ''
         }
 
@@ -20,7 +22,7 @@ class QueueLoginForm extends Component {
     }
 
     handleLoginChange(event) {
-        this.setState({ ...this.state, login: event.target.value });
+        this.setState({ ...this.state, username: event.target.value });
     }
 
     handlePasswordChange(event) {
@@ -28,19 +30,14 @@ class QueueLoginForm extends Component {
     }
 
     async handleSendClick(event) {
-        const { history } = this.props;
-        const { login, password } = this.state;
+        const { history, dispatch } = this.props;
+        const { username, password } = this.state;
 
-        try {
-            const { data, status } = await axios.post('https://equeue-bspu.herokuapp.com/admin/login', {
-                username: login, password
-            })
+        await dispatch(login(username, password));
 
-            if (status === 200 && data.access_token) {
-                localStorage.setItem('token', data.access_token);
-                history.push('/dashboard');
-            }
-        } catch(e) { console.log(e); }
+        const { token, hasErrors } = this.props;
+
+        if (token && !hasErrors) history.push('/dashboard');
     }
 
     render() {
@@ -80,4 +77,10 @@ class QueueLoginForm extends Component {
     }
 }
 
-export default withRouter(QueueLoginForm);
+const mapStateToProps = state => ({
+    authUser: state.auth.authUser,
+    token: state.auth.token,
+    hasErrors: state.auth.hasErrors,
+})
+
+export default connect(mapStateToProps)(withRouter(QueueLoginForm));

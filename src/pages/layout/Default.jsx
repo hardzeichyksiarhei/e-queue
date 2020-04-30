@@ -1,7 +1,11 @@
 import React from 'react';
+import { connect } from 'react-redux'
+
 import { AppBar, Toolbar, Typography, Container, Paper, Fab } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { ExitToApp } from '@material-ui/icons';
+
+import { logout } from '../../store/actions/authActions'
 
 import QueueFooter from '../../components/QueueFooter/QueueFooter';
 
@@ -19,12 +23,12 @@ const useStyles = makeStyles(theme => ({
 
 
 
-function Default({ children, title, paperSize, history }) {
+function Default({ children, paperSize, dispatch, history }) {
     const classes = useStyles();
 
-    function logout() {
-        localStorage.removeItem('token');
-        history.push('/login');
+    const exit = async () => {
+        await dispatch(logout());
+        history.push('/login')
     }
 
     return (
@@ -43,11 +47,13 @@ function Default({ children, title, paperSize, history }) {
             </Container>
             <QueueFooter />
 
-            { localStorage.getItem('token') ? <Fab className="logout" color="secondary" onClick={logout}>
+            { localStorage.getItem('token') ? <Fab className="logout" color="secondary" onClick={exit}>
                 <ExitToApp />
             </Fab> : '' }
         </div>
     );
 }
 
-export default Default;
+const mapStateToProps = state => ({})
+
+export default connect(mapStateToProps)(Default);
