@@ -19,7 +19,7 @@ class QueueDashboard extends Component {
     async _fetchDashboardData() {
         const token = localStorage.getItem('token');
         try {
-            const { data } = await axios.get('https://equeue-bspu.herokuapp.com/admin/stats', { headers: { Authorization: `Bearer ${token}` } });
+            const { data } = await axios.get('https://equeue-bspu.herokuapp.com/admin/stats');
 
             console.log(data);
         } catch(e) {
