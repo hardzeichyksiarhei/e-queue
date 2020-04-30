@@ -65,8 +65,6 @@ class QueueReservationForm extends Component {
         this.defaultMinTime = new Date().setHours(9, 0, 0, 0);
         this.defaultMaxTime = new Date().setHours(18, 45, 0, 0);
 
-        this.isNotAccess = new Date() < this.defaultMinDate;
-
         this.state = {
             firstName: '',
             lastName: '',
@@ -84,6 +82,7 @@ class QueueReservationForm extends Component {
                 severity: 'success',
                 message: ''
             },
+            isNotAccess: process.env.NODE_ENV === 'production' && new Date() < this.defaultMinDate,
 
             closedDates: []
         };
@@ -191,7 +190,7 @@ class QueueReservationForm extends Component {
     async handleSendClick(event) {
         event.preventDefault();
 
-        if (this.isNotAccess) return;
+        if (this.state.isNotAccess) return;
 
         const { firstName, lastName, email, date, isChecked } = this.state;
 
@@ -341,7 +340,7 @@ class QueueReservationForm extends Component {
                     </Grid>
 
                     <Grid item xs={12} className="submit-wrapper">
-                        <Button size="large" variant="contained" color="primary" type="submit" disabled={this.isNotAccess || (!this.state.isChecked || this.state.busy)}>
+                        <Button size="large" variant="contained" color="primary" type="submit" disabled={this.state.isNotAccess || (!this.state.isChecked || this.state.busy)}>
                             Забронировать
                         </Button>
                         {(this.state.busy) ? <CircularProgress className="submit-loading" /> : ''}
@@ -374,14 +373,13 @@ class QueueReservationForm extends Component {
                     </Alert>
                 </Collapse>
 
-                <Alert
+                {this.state.isNotAccess ? <Alert
                     className="reservation-alert"
                     variant="filled"
-                    open={this.isNotAccess}
                     severity="info"
                 >
                     Предварительная запись начнется с {format(this.defaultMinDate, 'd MMMM yyyy', { locale: ru })}
-                </Alert>
+                </Alert> : ''}
 
                 <Modal
                     aria-labelledby="transition-modal-title"
