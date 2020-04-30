@@ -181,7 +181,7 @@ class QueueReservationForm extends Component {
     async handleSendClick(event) {
         event.preventDefault();
 
-        const { firstName, lastName, email, date, isChecked, alert } = this.state;
+        const { firstName, lastName, email, date, isChecked } = this.state;
 
         this.setState({ ...this.state, busy: true });
 

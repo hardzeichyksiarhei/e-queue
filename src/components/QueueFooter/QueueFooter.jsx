@@ -9,8 +9,8 @@ function QueueFooter() {
   return (
     <div className="app-footer">
         <div className="app-footer__copyright">
-            <a href="https://bspu.by/" target="_blank"><img src={BSPU} alt="BSPU"/></a>
-            <Typography>(с) { new Date().getFullYear() }, Учреждение образования «<a className="link" href="https://bspu.by/" target="_blank">Белорусский государственный педагогический университет имени Максима Танка</a>»</Typography>
+            <a href="https://bspu.by/" target="_blank" rel="noopener noreferrer"><img src={BSPU} alt="BSPU"/></a>
+            <Typography>(с) { new Date().getFullYear() }, Учреждение образования «<a className="link" href="https://bspu.by/" target="_blank" rel="noopener noreferrer">Белорусский государственный педагогический университет имени Максима Танка</a>»</Typography>
         </div>
     </div>
   );

@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Grid, TextField, Button } from '@material-ui/core';
 
 import axios from 'axios';
 
@@ -20,7 +19,7 @@ class QueueDashboard extends Component {
     async _fetchDashboardData() {
         const token = localStorage.getItem('token');
         try {
-            const { data, status } = await axios.get('https://equeue-bspu.herokuapp.com/admin/stats', { headers: { Authorization: `Bearer ${token}` } });
+            const { data } = await axios.get('https://equeue-bspu.herokuapp.com/admin/stats', { headers: { Authorization: `Bearer ${token}` } });
 
             console.log(data);
         } catch(e) {
