@@ -13,13 +13,13 @@ import './Default.sass';
 
 const useStyles = makeStyles(theme => ({
     title: {
-      flexGrow: 1,
+        flexGrow: 1,
     },
     paper: {
-      padding: theme.spacing(4),
-      color: theme.palette.text.secondary,
+        padding: theme.spacing(4),
+        color: theme.palette.text.secondary,
     }
-  }))
+}))
 
 
 
@@ -36,7 +36,7 @@ function Default({ children, paperSize, dispatch, history }) {
             <AppBar position="static">
                 <Toolbar>
                     <Typography variant="h6" className={classes.title} align="center">
-                        Регистрация на ЦТ* — онлайн очередь
+                        Электронная очередь для предварительной записи посещения пункта регистрации на ЦТ (БГПУ)
                 </Typography>
                 </Toolbar>
             </AppBar>
@@ -47,9 +47,9 @@ function Default({ children, paperSize, dispatch, history }) {
             </Container>
             <QueueFooter />
 
-            { localStorage.getItem('token') ? <Fab className="logout" color="secondary" onClick={exit}>
+            {localStorage.getItem('token') ? <Fab className="logout" color="secondary" onClick={exit}>
                 <ExitToApp />
-            </Fab> : '' }
+            </Fab> : ''}
         </div>
     );
 }

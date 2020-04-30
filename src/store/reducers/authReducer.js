@@ -33,6 +33,26 @@ export default function authReducer(state = initialState, action) {
                 token: null,
                 loading: false
             };
+
+
+        case actions.FETCH_USER_REQUEST:
+            return {
+                ...state,
+                loading: true
+            };
+        case actions.FETCH_USER_SUCCESS:
+            return {
+                ...state,
+                user: action.payload,
+                loading: false,
+                hasErrors: false
+            };
+        case actions.FETCH_USER_FAILURE:
+            return {
+                ...state,
+                loading: false,
+                hasErrors: true
+            };
         default:
             return state
     }

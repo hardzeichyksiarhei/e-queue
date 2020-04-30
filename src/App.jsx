@@ -59,7 +59,7 @@ function App() {
           <Switch>
             <RouteWrapper name="login" path="/login" component={AdminLogin} layout={(props) => <Default {...props} paperSize={'sm'} />} />
             <PrivateRouter name="dashboard" path="/dashboard" component={AdminDashboard} layout={(props) => <Default {...props} paperSize={'xl'} />} />
-            <RouteWrapper name="home" path="/" component={Home} layout={Default} />
+            <RouteWrapper name="home" path="/" component={Home} layout={(props) => <Default {...props} paperSize={'md'} />} />
           </Switch>
         </Router>
       </div>

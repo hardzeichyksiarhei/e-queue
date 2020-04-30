@@ -65,6 +65,8 @@ class QueueReservationForm extends Component {
         this.defaultMinTime = new Date().setHours(9, 0, 0, 0);
         this.defaultMaxTime = new Date().setHours(18, 45, 0, 0);
 
+        this.isNotAccess = new Date() < this.defaultMinDate;
+
         this.state = {
             firstName: '',
             lastName: '',
@@ -88,6 +90,7 @@ class QueueReservationForm extends Component {
 
         this._refreshTime = this._refreshTime.bind(this);
         this._filterDate = this._filterDate.bind(this);
+        this._dateFormat = this._dateFormat.bind(this);
 
         this.handleFirstNameChange = this.handleFirstNameChange.bind(this);
         this.handleLastNameChange = this.handleLastNameChange.bind(this);
@@ -116,6 +119,13 @@ class QueueReservationForm extends Component {
 
     /* Methods */
 
+    _dateFormat() {
+        if (!this.state.date) return '';
+        const date = this.state.date;
+        const nextTime = format(new Date(date).setMinutes(50), 'HH:mm');
+        return format(date, `d MMMM yyyy HH:mm - ${nextTime}`, { locale: ru })
+    }
+
     async _fetchClosedDates() {
         const { data, status } = await axios.get('https://equeue-bspu.herokuapp.com/api/closed-dates');
         return status === 200 ? data.map(d => new Date(d).setHours(0)) : [];
@@ -134,13 +144,13 @@ class QueueReservationForm extends Component {
 
     _initDate() {
         const allDates = eachDayOfInterval({
-            start: this.defaultMinDate, 
+            start: this.defaultMinDate,
             end: this.defaultMaxDate
         });
-        
+
         const currentDate = allDates.find(d => this._filterDate(d));
         currentDate.setHours(9);
-        
+
         this.setState({
             ...this.state,
             date: currentDate
@@ -180,6 +190,8 @@ class QueueReservationForm extends Component {
 
     async handleSendClick(event) {
         event.preventDefault();
+
+        if (this.isNotAccess) return;
 
         const { firstName, lastName, email, date, isChecked } = this.state;
 
@@ -278,7 +290,7 @@ class QueueReservationForm extends Component {
                                                 id="date"
                                                 variant="outlined"
                                                 fullWidth
-                                                value={this.state.date && format(this.state.date, 'd MMMM yyyy HH:mm', { locale: ru })}
+                                                value={this._dateFormat()}
                                                 placeholder="Выберите день недели и имя *"
                                                 InputProps={{
                                                     readOnly: true,
@@ -329,7 +341,7 @@ class QueueReservationForm extends Component {
                     </Grid>
 
                     <Grid item xs={12} className="submit-wrapper">
-                        <Button size="large" variant="contained" color="primary" type="submit" disabled={!this.state.isChecked || this.state.busy}>
+                        <Button size="large" variant="contained" color="primary" type="submit" disabled={this.isNotAccess || (!this.state.isChecked || this.state.busy)}>
                             Забронировать
                         </Button>
                         {(this.state.busy) ? <CircularProgress className="submit-loading" /> : ''}
@@ -361,6 +373,16 @@ class QueueReservationForm extends Component {
                         {this.state.alert.message}
                     </Alert>
                 </Collapse>
+
+                <Alert
+                    className="reservation-alert"
+                    variant="filled"
+                    open={this.isNotAccess}
+                    severity="info"
+                >
+                    Предварительная запись начнется с {format(this.defaultMinDate, 'd MMMM yyyy', { locale: ru })}
+                </Alert>
+
                 <Modal
                     aria-labelledby="transition-modal-title"
                     aria-describedby="transition-modal-description"

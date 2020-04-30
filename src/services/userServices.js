@@ -2,7 +2,8 @@ import axios from 'axios';
 
 export const userServices = {
     login,
-    logout
+    logout,
+    fetchUser
 };
 
 async function login(username, password) {
@@ -18,4 +19,11 @@ async function login(username, password) {
 
 async function logout() {
     localStorage.removeItem('token');
+}
+
+async function fetchUser() {
+    try {
+        const { data, status } = await axios.get('https://equeue-bspu.herokuapp.com/admin/user')
+        return status === 200 ? data : null;
+    } catch (e) { throw e; }
 }

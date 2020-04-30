@@ -5,6 +5,10 @@ export const LOGIN_SUCCESS = 'LOGIN_SUCCESS'
 export const LOGIN_FAILURE = 'LOGIN_FAILURE'
 export const LOGOUT_REQUEST = 'LOGOUT_REQUEST'
 
+export const FETCH_USER_REQUEST = 'FETCH_USER_REQUEST'
+export const FETCH_USER_SUCCESS = 'FETCH_USER_SUCCESS'
+export const FETCH_USER_FAILURE = 'FETCH_USER_FAILURE'
+
 export const loginRequest = () => ({ type: LOGIN_REQUEST })
 
 export const loginSuccess = payload => ({
@@ -37,5 +41,27 @@ export function logout() {
   return async dispatch => {
     await userServices.logout()
     dispatch(logoutRequest())
+  }
+}
+
+export const fetchUserRequest = () => ({ type: FETCH_USER_REQUEST })
+
+export const fetchUserSuccess = payload => ({
+  type: FETCH_USER_SUCCESS,
+  payload,
+})
+
+export const fetchUserFailure = () => ({ type: FETCH_USER_FAILURE })
+
+export function fetchUser() {
+  return async dispatch => {
+    dispatch(fetchUserRequest())
+
+    try {
+      const user = await userServices.fetchUser();
+      dispatch(fetchUserSuccess(user));
+    } catch (e) {
+      dispatch(fetchUserFailure());
+    }
   }
 }
