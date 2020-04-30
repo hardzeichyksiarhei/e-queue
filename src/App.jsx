@@ -8,6 +8,7 @@ import {
   Route,
   Redirect
 } from "react-router-dom";
+import store from './store';
 
 import Home from './pages/Home';
 import AdminLogin from './pages/admin/login/Login';
@@ -15,6 +16,7 @@ import AdminDashboard from './pages/admin/dashboard/Dashboard';
 
 import './App.sass';
 import Default from './pages/layout/Default';
+import { fetchUser } from './store/actions/authActions';
 
 const theme = createMuiTheme({
   palette: {
@@ -51,7 +53,13 @@ function PrivateRouter({
   );
 }
 
-function App() {
+function App(props) {
+  const { auth: { user, token } } = store.getState();
+  
+  if (!user && token) {
+    store.dispatch(fetchUser())
+  }
+
   return (
     <ThemeProvider theme={theme}>
       <div className="app-container">

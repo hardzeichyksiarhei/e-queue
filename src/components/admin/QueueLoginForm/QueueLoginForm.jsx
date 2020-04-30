@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Grid, TextField, Button } from '@material-ui/core';
 
-import { withRouter } from 'react-router-dom'
+import { withRouter, Redirect } from 'react-router-dom'
 import { connect } from 'react-redux'
 
 import { login } from '../../../store/actions/authActions'
@@ -30,17 +30,17 @@ class QueueLoginForm extends Component {
     }
 
     async handleSendClick(event) {
-        const { history, dispatch } = this.props;
+        const { history } = this.props;
         const { username, password } = this.state;
 
-        await dispatch(login(username, password));
-
-        const { token, hasErrors } = this.props;
-
-        if (token && !hasErrors) history.push('/dashboard');
+        await this.props.login(username, password);
     }
 
     render() {
+        const { token, hasErrors } = this.props;
+
+        if (token && !hasErrors) return <Redirect to="/dashboard" />
+
         return (
             <Grid container spacing={3}>
                 <Grid item xs={12}>
@@ -78,9 +78,15 @@ class QueueLoginForm extends Component {
 }
 
 const mapStateToProps = state => ({
-    auth: state.auth.authUser,
+    user: state.auth.user,
     token: state.auth.token,
     hasErrors: state.auth.hasErrors,
 })
 
-export default connect(mapStateToProps)(withRouter(QueueLoginForm));
+const mapDispatchToProps = dispatch => ({
+    login: (username, password) => {
+        dispatch(login(username, password))
+    },
+});
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(QueueLoginForm));

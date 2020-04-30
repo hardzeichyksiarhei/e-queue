@@ -25,12 +25,9 @@ export function login(username, password) {
     dispatch(loginRequest())
 
     try {
-      const data = await userServices.login(username, password)
+      const { user, access_token: token } = await userServices.login(username, password)
 
-      dispatch(loginSuccess({
-        user: { login: username },
-        token: data.access_token
-      }))
+      dispatch(loginSuccess({ user, token }))
     } catch (e) {
       dispatch(loginFailure())
     }
