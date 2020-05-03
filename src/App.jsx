@@ -1,4 +1,7 @@
 import React from 'react';
+
+import { YMInitializer } from 'react-yandex-metrika';
+
 import { ruRU } from '@material-ui/core/locale';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 
@@ -64,6 +67,8 @@ function App(props) {
   return (
     <ThemeProvider theme={theme}>
       <div className="app-container">
+        { process.env.NODE_ENV === 'production' ? <YMInitializer accounts={[62470567]} /> : '' }
+
         <Router>
           <Switch>
             <RouteWrapper exact name="home" path="/" component={Home} layout={(props) => <Default {...props} paperSize={'md'} />} />

@@ -86,20 +86,6 @@ class QueueReservationForm extends Component {
 
             closedDates: []
         };
-
-        this._refreshTime = this._refreshTime.bind(this);
-        this._filterDate = this._filterDate.bind(this);
-        this._dateFormat = this._dateFormat.bind(this);
-
-        this.handleFirstNameChange = this.handleFirstNameChange.bind(this);
-        this.handleLastNameChange = this.handleLastNameChange.bind(this);
-        this.handleEmailChange = this.handleEmailChange.bind(this);
-
-        this.handleDateChange = this.handleDateChange.bind(this);
-
-        this.handleCheckedChange = this.handleCheckedChange.bind(this);
-
-        this.handleSendClick = this.handleSendClick.bind(this);
     }
 
     async componentDidMount() {
@@ -116,9 +102,9 @@ class QueueReservationForm extends Component {
     }
 
 
-    /* Methods */
+    /* Internal Methods */
 
-    _dateFormat() {
+    _dateFormat = () => {
         if (!this.state.date) return '';
         const date = this.state.date;
         const nextTime = format(new Date(date).setMinutes(50), 'HH:mm');
@@ -130,7 +116,7 @@ class QueueReservationForm extends Component {
         return status === 200 ? data.map(d => new Date(d).setHours(0)) : [];
     }
 
-    _refreshTime() {
+    _refreshTime = () => {
         const { date, maxTime } = this.state;
         const isSaturday = date.getDay() === 6;
         const isDefaultMaxTime = this.defaultMaxTime === maxTime
@@ -156,7 +142,7 @@ class QueueReservationForm extends Component {
         }, () => { this._refreshTime(); })
     }
 
-    _filterDate(d) {
+    _filterDate = d => {
         const day = d.getDay();
         const month = d.getMonth();
         const date = d.getDate();
@@ -165,29 +151,25 @@ class QueueReservationForm extends Component {
             || (!isCloseDay && month === 4 && (date === 2 || date === 30))
     }
 
-    handleLastNameChange(event) {
-        this.setState({ ...this.state, lastName: event.target.value });
+    /* Methods */
+
+    handleInputChange = (event) => {
+        event.persist();
+        this.setState(prev => ({
+            ...prev,
+            [event.target.name]: event.target.value
+        }))
     }
 
-    handleFirstNameChange(event) {
-        this.setState({ ...this.state, firstName: event.target.value });
-    }
-
-    handleEmailChange(event) {
-        this.setState({ ...this.state, email: event.target.value });
-    }
-
-    handleCheckedChange(event) {
+    handleCheckedChange = (event) => {
         this.setState({ ...this.state, isChecked: event.target.checked });
     }
 
-    handleDateChange(date) {
-        this.setState({ ...this.state, date }, () => {
-            this._refreshTime();
-        });
+    handleDateChange = (date) => {
+        this.setState({ ...this.state, date }, () => { this._refreshTime(); });
     }
 
-    async handleSendClick(event) {
+    handleSendClick = async (event) => {
         event.preventDefault();
 
         if (this.state.isNotAccess) return;
@@ -244,8 +226,9 @@ class QueueReservationForm extends Component {
                             id="first-name"
                             variant="outlined"
                             fullWidth
+                            name="firstName"
                             value={this.state.firstName}
-                            onChange={this.handleFirstNameChange}
+                            onChange={this.handleInputChange}
                             placeholder="Иван"
                             label="Имя"
                             required
@@ -257,8 +240,9 @@ class QueueReservationForm extends Component {
                             id="last-name"
                             variant="outlined"
                             fullWidth
+                            name="lastName"
                             value={this.state.lastName}
-                            onChange={this.handleLastNameChange}
+                            onChange={this.handleInputChange}
                             placeholder="Иванов"
                             label="Фамилия"
                             required
@@ -270,8 +254,9 @@ class QueueReservationForm extends Component {
                             id="e-mail"
                             variant="outlined"
                             fullWidth
+                            name="email"
                             value={this.state.email}
-                            onChange={this.handleEmailChange}
+                            onChange={this.handleInputChange}
                             placeholder="example@gmail.com"
                             label="E-mail"
                             required
@@ -335,7 +320,7 @@ class QueueReservationForm extends Component {
                                     color="primary"
                                 />
                             }
-                            label="Я согласен на обработку персональных данных"
+                            label="Даю согласие на обработку персональных данных"
                         />
                     </Grid>
 
@@ -378,7 +363,7 @@ class QueueReservationForm extends Component {
                     variant="filled"
                     severity="info"
                 >
-                    Предварительная запись начнется с {format(this.defaultMinDate, 'd MMMM yyyy', { locale: ru })}
+                    Предварительная запись начнется с {format(this.defaultMinDate, 'd MMMM yyyy HH:mm', { locale: ru })}
                 </Alert> : ''}
 
                 <Modal
