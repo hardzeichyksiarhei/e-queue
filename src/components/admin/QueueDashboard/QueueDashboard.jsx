@@ -5,6 +5,7 @@ import axios from 'axios';
 import DatePicker from "react-datepicker";
 import { format } from 'date-fns';
 import { Grid } from '@material-ui/core';
+import ru from 'date-fns/locale/ru';
 
 class QueueDashboard extends Component {
   constructor(props) {
@@ -170,6 +171,7 @@ class QueueDashboard extends Component {
               width="100%"
             />
             <DatePicker
+              locale={ru}
               dateFormat="yyyy.MM.dd"
               filterDate={this._filterDate}
               minDate={this.defaultMinDate}

@@ -56,6 +56,7 @@ class QueueLoginForm extends Component {
 
                 <Grid item xs={12}>
                     <TextField
+                        type="password"
                         id="last-name"
                         variant="outlined"
                         fullWidth
