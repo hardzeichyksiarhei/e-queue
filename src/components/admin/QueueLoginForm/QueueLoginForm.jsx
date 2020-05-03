@@ -30,7 +30,6 @@ class QueueLoginForm extends Component {
     }
 
     async handleSendClick(event) {
-        const { history } = this.props;
         const { username, password } = this.state;
 
         await this.props.login(username, password);

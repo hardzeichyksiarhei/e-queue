@@ -1,4 +1,8 @@
-import React from 'react';
+import React, { Component } from 'react';
+import { CircularProgress } from '@material-ui/core';
+
+import { YMInitializer } from 'react-yandex-metrika';
+
 import { ruRU } from '@material-ui/core/locale';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 
@@ -8,7 +12,8 @@ import {
   Route,
   Redirect
 } from "react-router-dom";
-import store from './store';
+// import store from './store';
+import { connect } from 'react-redux';
 
 import Home from './pages/Home';
 import AdminLogin from './pages/admin/login/Login';
@@ -54,27 +59,44 @@ function PrivateRouter({
   );
 }
 
-function App(props) {
-  const { auth: { user, token } } = store.getState();
-  
-  if (!user && token) {
-    store.dispatch(fetchUser())
+class App extends Component {
+  constructor(props) {
+    super(props);
   }
 
-  return (
-    <ThemeProvider theme={theme}>
-      <div className="app-container">
-        <Router>
-          <Switch>
-            <RouteWrapper exact name="home" path="/" component={Home} layout={(props) => <Default {...props} paperSize={'md'} />} />
-            <RouteWrapper exact name="login" path="/login" component={AdminLogin} layout={(props) => <Default {...props} paperSize={'sm'} />} />
-            <PrivateRouter exact name="dashboard" path="/dashboard" component={AdminDashboard} layout={(props) => <Default {...props} paperSize={'xl'} />} />
-            <RouteWrapper name="404" component={NoMatchPage} layout={(props) => <Default {...props} paperSize={'md'} />} />
-          </Switch>
-        </Router>
-      </div>
-    </ThemeProvider>
-  );
+  componentDidMount() {
+    const { user, token, dispatch } = this.props;
+    if (!user && token) {
+      dispatch(fetchUser())
+    }
+  }
+
+  render() {
+    const { user, token } = this.props;
+
+    return (!user && token) ? <div className="app-loading"><CircularProgress /></div>
+      : (
+        <ThemeProvider theme={theme}>
+          <div className="app-container">
+            {process.env.NODE_ENV === 'production' ? <YMInitializer accounts={[62470567]} /> : ''}
+
+            <Router>
+              <Switch>
+                <RouteWrapper exact name="home" path="/" component={Home} layout={(props) => <Default {...props} paperSize={'md'} />} />
+                <RouteWrapper exact name="login" path="/login" component={AdminLogin} layout={(props) => <Default {...props} paperSize={'sm'} />} />
+                <PrivateRouter exact name="dashboard" path="/dashboard" component={AdminDashboard} layout={(props) => <Default {...props} paperSize={'xl'} />} />
+                <RouteWrapper name="404" component={NoMatchPage} layout={(props) => <Default {...props} paperSize={'md'} />} />
+              </Switch>
+            </Router>
+          </div>
+        </ThemeProvider>
+      );
+  }
 }
 
-export default App;
+const mapStateToProps = state => ({
+  user: state.auth.user,
+  token: state.auth.token
+})
+
+export default connect(mapStateToProps)(App);
