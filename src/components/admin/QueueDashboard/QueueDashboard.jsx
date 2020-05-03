@@ -18,6 +18,20 @@ class QueueDashboard extends Component {
       selectedDate: this.defaultMinDate,
       dayStats: {
         options: {
+          title: {
+            text: 'Распределение количества абитуриентов по времени',
+            align: 'center',
+            margin: 10,
+            offsetX: 0,
+            offsetY: 0,
+            floating: false,
+            style: {
+              fontSize:  '24px',
+              fontWeight:  'bold',
+              fontFamily:  undefined,
+              color:  '#263238'
+            },
+          },
           chart: {
             id: "basic-bar"
           },
@@ -38,7 +52,7 @@ class QueueDashboard extends Component {
           }
         },
         series: [{
-          name: "numberOfReg",
+          name: "",
           data: []
         }]
       },
@@ -56,7 +70,21 @@ class QueueDashboard extends Component {
           plotOptions: {
             bar: {
               distributed: true
-            }
+            },
+          },
+          title: {
+            text: 'Распределение количества абитуриентов по датам',
+            align: 'center',
+            margin: 10,
+            offsetX: 0,
+            offsetY: 0,
+            floating: false,
+            style: {
+              fontSize:  '24px',
+              fontWeight:  'bold',
+              fontFamily:  undefined,
+              color:  '#263238'
+            },
           },
           theme: {
             mode: 'light',
@@ -64,14 +92,13 @@ class QueueDashboard extends Component {
           }
         },
         series: [{
-          name: "numberOfReg",
+          name: "",
           data: []
         }]
       }
     }
 
   }
-
 
   componentDidMount() {
     this._fetchNumberOfUsersByDay();
@@ -80,7 +107,6 @@ class QueueDashboard extends Component {
 
   async _fetchNumberOfUsersByDay(date = this.defaultMinDate) {
     const formatDate = format(date, 'yyyy-MM-dd');
-
     try {
       const { labels, values } = await userServices.fetchNunmberOfUsersByDay(formatDate);
       this.setState({
@@ -95,7 +121,7 @@ class QueueDashboard extends Component {
             }
           },
           series: [{
-            name: "numberOfReg",
+            name: "Количество абитуриентов",
             data: values
           }]
         }
@@ -121,7 +147,7 @@ class QueueDashboard extends Component {
             }
           },
           series: [{
-            name: "numberOfReg",
+            name: "Количество абитуриентов",
             data: values
           }]
         }
