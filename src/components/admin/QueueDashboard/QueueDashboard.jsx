@@ -6,6 +6,7 @@ import DatePicker from "react-datepicker";
 import { format } from 'date-fns';
 import { Grid, TextField } from '@material-ui/core';
 import ru from 'date-fns/locale/ru';
+import QueueNotAccess from '../QueueNotAccess/QueueNotAccess';
 
 class QueueDashboard extends Component {
   constructor(props) {
@@ -73,14 +74,15 @@ class QueueDashboard extends Component {
 
 
   componentDidMount() {
-    this._fetchDashboardData();
-    this._fetchNumberOfUsersByDay('2020-05-04');
     this._fetchNumberOfUsersByDay();
+    this._fetchNunmberOfUsers();
   }
 
-  async _fetchNumberOfUsersByDay(date) {
-    if (date) {
-      const { labels, values } = await userServices.fetchNunmberOfUsersByDay(date);
+  async _fetchNumberOfUsersByDay(date = this.defaultMinDate) {
+    const formatDate = format(date, 'yyyy-MM-dd');
+
+    try {
+      const { labels, values } = await userServices.fetchNunmberOfUsersByDay(formatDate);
       this.setState({
         ...this.state,
         dayStats: {
@@ -98,7 +100,14 @@ class QueueDashboard extends Component {
           }]
         }
       });
-    } else {
+    } catch (e) {
+      this.setState({ ...this.state, isAccess: false })
+      console.error(e);
+    }
+  }
+
+  async _fetchNunmberOfUsers() {
+    try {
       const { labels, values } = await userServices.fetchNunmberOfUsers();
       this.setState({
         ...this.state,
@@ -117,20 +126,9 @@ class QueueDashboard extends Component {
           }]
         }
       });
-    }
-
-  }
-
-  async _fetchDashboardData() {
-    try {
-      const { data } = await axios.get('https://equeue-bspu.herokuapp.com/admin/stats');
-      console.log(data);
     } catch (e) {
-      this.setState({
-        ...this.state,
-        isAccess: false
-      })
-      console.log(e);
+      this.setState({ ...this.state, isAccess: false })
+      console.error(e);
     }
   }
 
@@ -143,8 +141,7 @@ class QueueDashboard extends Component {
   }
 
   handleDateChange = (date) => {
-    const formatedDate = format(date, 'yyyy-MM-dd');
-    this._fetchNumberOfUsersByDay(formatedDate);
+    this._fetchNumberOfUsersByDay(date);
     this.setState({ ...this.state, selectedDate: date }, () => {
       console.log(this.state);
     });
@@ -154,12 +151,8 @@ class QueueDashboard extends Component {
   render() {
     const { isAccess } = this.state;
 
-    if (!isAccess) return (
-      <div>
-        Not Access
-      </div>
-    )
-
+    if (!isAccess) return <QueueNotAccess />
+   
     return (
       <Grid container spacing={3}>
         <Grid item md={12} lg={6}>
