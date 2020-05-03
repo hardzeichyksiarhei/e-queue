@@ -21,14 +21,24 @@ class QueueDashboard extends Component {
           },
           xaxis: {
             categories: []
+          },
+          legend: {
+            show: false
+          },
+          plotOptions: {
+            bar: {
+              distributed: true
+            }
+          },
+          theme: {
+            mode: 'light',
+            palette: 'palette1'
           }
         },
-        series: [
-          {
-            name: "numberOfReg",
-            data: []
-          }
-        ]
+        series: [{
+          name: "numberOfReg",
+          data: []
+        }]
       },
       allTimeStats: {
         options: {
@@ -37,14 +47,24 @@ class QueueDashboard extends Component {
           },
           xaxis: {
             categories: []
+          },
+          legend: {
+            show: false
+          },
+          plotOptions: {
+            bar: {
+              distributed: true
+            }
+          },
+          theme: {
+            mode: 'light',
+            palette: 'palette2'
           }
         },
-        series: [
-          {
-            name: "numberOfReg",
-            data: []
-          }
-        ]
+        series: [{
+          name: "numberOfReg",
+          data: []
+        }]
       }
     }
 
@@ -61,12 +81,13 @@ class QueueDashboard extends Component {
     if (date) {
       const { labels, values } = await userServices.fetchNunmberOfUsersByDay(date);
       this.setState({
-        ...this.state, dayStats: {
+        ...this.state,
+        dayStats: {
+          ...this.state.dayStats,
           options: {
-            chart: {
-              id: "basic-bar"
-            },
+            ...this.state.dayStats.options,
             xaxis: {
+              ...this.state.dayStats.xaxis,
               categories: labels
             }
           },
@@ -79,12 +100,13 @@ class QueueDashboard extends Component {
     } else {
       const { labels, values } = await userServices.fetchNunmberOfUsers();
       this.setState({
-        ...this.state, allTimeStats: {
+        ...this.state,
+        allTimeStats: {
+          ...this.state.allTimeStats,
           options: {
-            chart: {
-              id: "basic-bar"
-            },
+            ...this.state.allTimeStats.options,
             xaxis: {
+              ...this.state.allTimeStats.options.xaxis,
               categories: labels
             }
           },
@@ -139,7 +161,7 @@ class QueueDashboard extends Component {
 
     return (
       <Grid container spacing={3}>
-        <Grid xl={6}>
+        <Grid item md={12} lg={6}>
           <div>
             <Chart
               options={this.state.dayStats.options}
@@ -158,7 +180,7 @@ class QueueDashboard extends Component {
             />
           </div>
         </Grid>
-        <Grid xl={6}>
+        <Grid item md={12} lg={6}>
           <Chart
             options={this.state.allTimeStats.options}
             series={this.state.allTimeStats.series}
