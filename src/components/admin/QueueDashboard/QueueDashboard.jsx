@@ -4,7 +4,7 @@ import Chart from "react-apexcharts";
 import axios from 'axios';
 import DatePicker from "react-datepicker";
 import { format } from 'date-fns';
-import { Grid } from '@material-ui/core';
+import { Grid, TextField } from '@material-ui/core';
 import ru from 'date-fns/locale/ru';
 
 class QueueDashboard extends Component {
@@ -171,6 +171,19 @@ class QueueDashboard extends Component {
               width="100%"
             />
             <DatePicker
+              customInput={
+                <TextField
+                  id="date"
+                  variant="outlined"
+                  fullWidth
+                  value={this.state.selectedDate && format(this.state.selectedDate, 'd MMMM yyyy', { locale: ru })}
+                  placeholder="Выберите день недели и имя *"
+                  InputProps={{
+                    readOnly: true,
+                  }}
+                  required
+                />
+              }
               locale={ru}
               dateFormat="yyyy.MM.dd"
               filterDate={this._filterDate}
