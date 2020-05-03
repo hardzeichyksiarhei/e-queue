@@ -3,7 +3,9 @@ import axios from 'axios';
 export const userServices = {
     login,
     logout,
-    fetchUser
+    fetchUser,
+    fetchNunmberOfUsers,
+    fetchNunmberOfUsersByDay
 };
 
 async function login(username, password) {
@@ -24,6 +26,20 @@ async function logout() {
 async function fetchUser() {
     try {
         const { data, status } = await axios.get('https://equeue-bspu.herokuapp.com/admin/user')
+        return status === 200 ? data : null;
+    } catch (e) { throw e; }
+}
+
+async function fetchNunmberOfUsersByDay(date) {
+    try {
+        const { data, status } = await axios.get(`https://equeue-bspu.herokuapp.com/admin/stats/day?date=${date}`);
+        return status === 200 ? data : null;
+    } catch (e) { throw e; }
+}
+
+async function fetchNunmberOfUsers() {
+    try {
+        const { data, status } = await axios.get(`https://equeue-bspu.herokuapp.com/admin/stats/all`);
         return status === 200 ? data : null;
     } catch (e) { throw e; }
 }
