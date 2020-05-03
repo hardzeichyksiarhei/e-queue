@@ -59,7 +59,10 @@ class QueueReservationForm extends Component {
     constructor(props) {
         super(props);
 
-        this.defaultMinDate = new Date(2020, 4, 2, 9, 0);
+        const currentDate = new Date().setHours(9);
+        const minDate = new Date(2020, 4, 2, 9, 0);
+
+        this.defaultMinDate = currentDate < minDate ? minDate : currentDate;
         this.defaultMaxDate = new Date(2020, 5, 1);
 
         this.defaultMinTime = new Date().setHours(9, 0, 0, 0);
