@@ -262,6 +262,7 @@ class QueueReservationForm extends Component {
                             onChange={this.handleInputChange}
                             placeholder="example@gmail.com"
                             label="E-mail"
+                            type="email"
                             required
                         />
                     </Grid>
