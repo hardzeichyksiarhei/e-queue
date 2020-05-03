@@ -51,6 +51,8 @@ export default function authReducer(state = initialState, action) {
         case actions.FETCH_USER_FAILURE:
             return {
                 ...state,
+                user: null,
+                token: null,
                 loading: false,
                 hasErrors: true
             };
