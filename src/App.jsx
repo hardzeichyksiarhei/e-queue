@@ -52,10 +52,6 @@ function RouteWrapper({
 }
 
 class App extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   componentDidMount() {
     const { user, token, dispatch } = this.props;
     if (!user && token) {
