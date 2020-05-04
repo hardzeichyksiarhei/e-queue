@@ -28,4 +28,4 @@ function NoMatchPage(props) {
     )
 }
 
-export default withLayout((props) => <Default {...props} paperSize={'md'} />)(NoMatchPage);
+export default withLayout()(NoMatchPage);

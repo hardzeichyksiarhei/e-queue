@@ -3,7 +3,6 @@ import { Grid } from '@material-ui/core';
 
 import { withLayout } from '../hoc/withLayout'
 
-import Default from './../pages/layout/Default';
 import QueueReservationForm from '../components/QueueReservationForm/QueueReservationForm';
 
 function Home() {
@@ -16,4 +15,4 @@ function Home() {
     )
 }
 
-export default withLayout((props) => <Default {...props} paperSize={'md'} />)(Home);
+export default withLayout()(Home);

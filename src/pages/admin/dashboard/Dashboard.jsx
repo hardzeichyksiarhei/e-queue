@@ -17,6 +17,6 @@ function AdminDashboard() {
 }
 
 export default compose(
-    withLayout((props) => <Default {...props} paperSize={'xl'} />),
+    withLayout(null, { paperSize: 'xl' }),
     withAuthRedirect
 )(AdminDashboard);

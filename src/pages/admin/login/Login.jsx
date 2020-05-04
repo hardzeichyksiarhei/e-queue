@@ -26,5 +26,5 @@ function Login({ location }) {
 
 export default compose(
     withRouter,
-    withLayout((props) => <Default {...props} paperSize={'md'} />)
+    withLayout(null, { paperSize: 'sm' })
 )(Login);
