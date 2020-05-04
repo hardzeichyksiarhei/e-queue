@@ -36,18 +36,9 @@ function RouteWrapper({
   ...rest
 }) {
   return (
-    <Route {...rest} render={(props) => {
-      if (!rest.auth)
-        return <Layout {...props}>
-          <Component {...props} />
-        </Layout>
-
-      if (rest.auth && localStorage.getItem('token'))
-        return <Layout {...props}>
-          <Component {...props} />
-        </Layout>
-      else return <Redirect to='/login' />
-    }} />
+    <Route {...rest} render={(props) => <Layout {...props}>
+      <Component {...props} />
+    </Layout>} />
   );
 }
 
@@ -72,7 +63,7 @@ class App extends Component {
               <Switch>
                 <RouteWrapper exact name="home" path="/" component={Home} layout={(props) => <Default {...props} paperSize={'md'} />} />
                 <RouteWrapper exact name="login" path="/login" component={AdminLogin} layout={(props) => <Default {...props} paperSize={'sm'} />} />
-                <RouteWrapper auth exact name="dashboard" path="/dashboard" component={AdminDashboard} layout={(props) => <Default {...props} paperSize={'xl'} />} />
+                <RouteWrapper exact name="dashboard" path="/dashboard" component={AdminDashboard} layout={(props) => <Default {...props} paperSize={'xl'} />} />
                 <RouteWrapper name="404" component={NoMatchPage} layout={(props) => <Default {...props} paperSize={'md'} />} />
               </Switch>
             </Router>
