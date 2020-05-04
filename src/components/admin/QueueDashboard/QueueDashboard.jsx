@@ -24,7 +24,7 @@ class QueueDashboard extends Component {
       selectedDate: this.defaultMinDate,
       dayStats: {
         options: {
-          chart: { id: 'daily-stats' },
+          chart: { id: 'Количество абитуриентов по времени' },
           title: {
             text: 'Количество абитуриентов по времени',
             align: 'center',
@@ -49,7 +49,7 @@ class QueueDashboard extends Component {
       },
       allTimeStats: {
         options: {
-          chart: { id: 'all-time-statistics' },
+          chart: { id: 'Распределение количества абитуриентов по датам' },
           xaxis: { categories: [] },
           legend: { show: false },
           plotOptions: {  bar: { distributed: true }, },
@@ -107,9 +107,9 @@ class QueueDashboard extends Component {
           ...prev.dayStats,
           options: {
             ...prev.dayStats.options,
-            chart: {
-              ...prev.dayStats.options.chart,
-              id: formatDate
+            title: {
+              ...prev.dayStats.options.title,
+              text: format(date, 'd MMMM yyyy', { locale: ru }),
             },
             xaxis: {
               ...prev.dayStats.options.xaxis,
@@ -125,7 +125,7 @@ class QueueDashboard extends Component {
           ...prev.table,
           data: users
         }
-      }), () => { console.log(1) });
+      }));
     } catch (e) {
       this.setState({ ...this.state, isAccess: false })
       console.error(e);
