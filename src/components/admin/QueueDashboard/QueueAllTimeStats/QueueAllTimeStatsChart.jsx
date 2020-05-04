@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Chart from "react-apexcharts";
 
-import { Grid } from '@material-ui/core';
+import { Grid, CircularProgress } from '@material-ui/core';
 
 import { userServices } from '../../../../services';
 
@@ -10,6 +10,8 @@ class QueueAllTimeStatsChart extends Component {
         super(props);
 
         this.state = {
+            loading: true,
+
             options: {
                 chart: { id: 'Распределение количества абитуриентов по датам' },
                 xaxis: { categories: [] },
@@ -48,23 +50,28 @@ class QueueAllTimeStatsChart extends Component {
                     ...this.state.options,
                     xaxis: { categories: labels }
                 },
-                series: [{ name: 'Количество абитуриентов', data: values }]
+                series: [{ name: 'Количество абитуриентов', data: values }],
+                loading: false
             });
         } catch (e) {
-            this.setState({ ...this.state, isAccess: false })
+            this.setState({ ...this.state, loading: false })
             console.error(e);
         }
     }
 
     render() {
+        if (this.state.loading) return <div className="dashboard-loading"><CircularProgress /></div>
+
         return (
-            <Grid item md={12} lg={8}>
-                <Chart
-                    options={this.state.options}
-                    series={this.state.series}
-                    type="bar"
-                    width="100%"
-                />
+            <Grid container spacing={3} justify="center" alignItems="flex-start">
+                <Grid item md={12} lg={8}>
+                    <Chart
+                        options={this.state.options}
+                        series={this.state.series}
+                        type="bar"
+                        width="100%"
+                    />
+                </Grid>
             </Grid>
         )
     }

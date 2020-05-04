@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 import { Tab, Tabs } from '@material-ui/core';
 import DateRangeOutlinedIcon from "@material-ui/icons/DateRangeOutlined";
 import WatchLaterOutlinedIcon from "@material-ui/icons/WatchLaterOutlined";
 
 import TabPanel from './TabPanel';
-import QueueNotAccess from '../QueueNotAccess/QueueNotAccess';
 import QueueDayStats from './QueueDayStats/QuqueDayStats';
 import QueueAllTimeStatsChart from './QueueAllTimeStats/QueueAllTimeStatsChart';
 
@@ -23,8 +21,6 @@ class QueueDashboard extends Component {
   }
 
   render() {
-    const { hasErrors } = this.props;
-
     return (
       <div>
         <Tabs

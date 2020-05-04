@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Grid, TextField, Button } from '@material-ui/core';
+import { Grid, TextField, Button, CircularProgress } from '@material-ui/core';
 import { DateRange, Schedule } from '@material-ui/icons';
 import DatePicker from "react-datepicker";
 import ru from 'date-fns/locale/ru';
@@ -19,6 +19,7 @@ class QueueDayStats extends Component {
         this.state = {
             selectedDate: this.defaultMinDate,
 
+            loading: true,
             dayStats: null,
         }
     }
@@ -38,23 +39,25 @@ class QueueDayStats extends Component {
 
     handleDateChange = (date) => {
         this._fetchNumberOfUsersByDay(date);
-        this.setState(prev => ({ ...prev, selectedDate: date }));
+        //this.setState(prev => ({ ...prev, selectedDate: date }));
     }
 
     async _fetchNumberOfUsersByDay(date = this.defaultMinDate) {
         const formatDate = format(date, 'yyyy-MM-dd');
         try {
             const dayStats = await userServices.fetchNunmberOfUsersByDay(formatDate);
-            this.setState(prev => ({ ...prev, dayStats }));
+            this.setState(prev => ({ ...prev, dayStats, selectedDate: date, loading: false }));
         } catch (e) {
-            this.setState({ ...this.state, isAccess: false })
+            this.setState({ ...this.state, loading: false })
             console.error(e);
         }
     }
 
     render() {
+        if (this.state.loading) return <div className="dashboard-loading"><CircularProgress /></div>
+
         return (
-            <>
+            <Grid container spacing={3} justify="center" alignItems="flex-start">
                 <Grid item md={12} lg={12}>
                     <Grid container justify="center"
                         alignItems="center">
@@ -103,7 +106,7 @@ class QueueDayStats extends Component {
                 <Grid item md={12} lg={6}>
                     <QueueDayStatsTable data={this.state.dayStats} />
                 </Grid>
-            </>
+            </Grid> 
         )
     }
 }

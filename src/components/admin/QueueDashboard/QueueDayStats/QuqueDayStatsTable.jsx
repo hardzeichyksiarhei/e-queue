@@ -14,7 +14,7 @@ class QueueDayStatsTable extends Component {
                     { title: 'Электронная почта', field: 'email' },
                     { title: 'Время', field: 'time', },
                 ],
-                data: [],
+                data: []
             }
         }
     }
@@ -37,7 +37,7 @@ class QueueDayStatsTable extends Component {
             <MaterialTable
                 title={this.state.table.title}
                 options={{
-                    pageSizeOptions: [20, 40, 60, 100, 150],
+                    pageSizeOptions: [7, 20, 40, 60, 100, 150],
                     pageSize: 7,
                     paginationType: 'stepped',
                     emptyRowsWhenPaging: false,

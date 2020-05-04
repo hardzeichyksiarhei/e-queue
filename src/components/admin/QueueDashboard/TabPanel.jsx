@@ -12,10 +12,7 @@ export default function TabPanel(props) {
         {...other}
         style={{paddingTop: 30}}
       >
-        {value === index && (
-           <Grid container spacing={3} justify="center"
-           alignItems="flex-start">{children} </Grid> 
-        )}
+        {value === index && children}
       </div>
     );
   }
