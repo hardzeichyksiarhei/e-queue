@@ -183,9 +183,9 @@ class QueueReservationForm extends Component {
 
         try {
             const { data: { message }, status } = await axios.post('https://equeue-bspu.herokuapp.com/api/graduates', {
-                firstName,
-                lastName,
-                email,
+                firstName: firstName.trim(),
+                lastName: lastName.trim(),
+                email: email.trim(),
                 date: formatISO9075(date),
                 isChecked
             });
