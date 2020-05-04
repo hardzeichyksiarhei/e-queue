@@ -3,7 +3,7 @@ import { userServices } from '../../../services';
 import Chart from "react-apexcharts";
 import DatePicker from "react-datepicker";
 import { format } from 'date-fns';
-import { Grid, TextField, Tab, Tabs } from '@material-ui/core';
+import { Grid, TextField, Tab, Tabs, CircularProgress } from '@material-ui/core';
 import ru from 'date-fns/locale/ru';
 import QueueNotAccess from '../QueueNotAccess/QueueNotAccess';
 import TabPanel from './TabPanel';
@@ -14,14 +14,17 @@ import MaterialTable from 'material-table';
 class QueueDashboard extends Component {
   constructor(props) {
     super(props);
+
     this.defaultMinDate = new Date(2020, 4, 2, 9, 0);
     this.defaultMaxDate = new Date(2020, 5, 1);
     this.state = {
+      loading: true,
       tabs: 0,
       isAccess: true,
       selectedDate: this.defaultMinDate,
       dayStats: {
         options: {
+          chart: { id: 'daily-stats' },
           title: {
             text: 'Количество абитуриентов по времени',
             align: 'center',
@@ -30,52 +33,26 @@ class QueueDashboard extends Component {
             offsetY: 0,
             floating: false,
             style: {
-              fontSize:  '24px',
-              fontWeight:  'bold',
-              fontFamily:  undefined,
-              color:  '#263238'
+              fontSize: '24px',
+              fontWeight: 'bold',
+              fontFamily: undefined,
+              color: '#263238'
             },
           },
-          chart: {
-            id: "basic-bar"
-          },
-          xaxis: {
-            categories: []
-          },
-          legend: {
-            show: false
-          },
-          plotOptions: {
-            bar: {
-              distributed: true
-            }
-          },
-          theme: {
-            mode: 'light',
-            palette: 'palette1'
-          }
+          xaxis: { categories: [] },
+          tooltip: { y: { formatter: (value) => Number(value) } },
+          legend: { show: false },
+          plotOptions: { bar: { distributed: true } },
+          theme: { mode: 'light', palette: 'palette1' }
         },
-        series: [{
-          name: "",
-          data: []
-        }]
+        series: [{ name: undefined, data: [] }]
       },
       allTimeStats: {
         options: {
-          chart: {
-            id: "basic-bar"
-          },
-          xaxis: {
-            categories: []
-          },
-          legend: {
-            show: false
-          },
-          plotOptions: {
-            bar: {
-              distributed: true
-            },
-          },
+          chart: { id: 'all-time-statistics' },
+          xaxis: { categories: [] },
+          legend: { show: false },
+          plotOptions: {  bar: { distributed: true }, },
           title: {
             text: 'Распределение количества абитуриентов по датам',
             align: 'center',
@@ -84,28 +61,22 @@ class QueueDashboard extends Component {
             offsetY: 0,
             floating: false,
             style: {
-              fontSize:  '24px',
-              fontWeight:  'bold',
-              fontFamily:  undefined,
-              color:  '#263238'
+              fontSize: '24px',
+              fontWeight: 'bold',
+              fontFamily: undefined,
+              color: '#263238'
             },
           },
-          theme: {
-            mode: 'light',
-            palette: 'palette2'
-          }
+          theme: { mode: 'light', palette: 'palette2' }
         },
-        series: [{
-          name: "",
-          data: []
-        }]
+        series: [{ name: undefined, data: [] }]
       },
       table: {
         columns: [
           { title: 'Имя', field: 'firstName' },
           { title: 'Фамилия', field: 'lastName' },
-          { title: 'Электронная почта', field: 'email'},
-          { title: 'Время', field: 'time',},
+          { title: 'Электронная почта', field: 'email' },
+          { title: 'Время', field: 'time', },
         ],
         data: [],
       }
@@ -113,23 +84,35 @@ class QueueDashboard extends Component {
   }
 
   componentDidMount() {
-    this._fetchNumberOfUsersByDay();
-    this._fetchNunmberOfUsers();
+    this._fetchAllData();
+  }
+
+  async _fetchAllData() {
+    try {
+      await this._fetchNumberOfUsersByDay();
+      await this._fetchNunmberOfUsers();
+
+      this.setState({ ...this.state, loading: false })
+    } catch (e) { this.setState({ ...this.state, loading: false }); console.error(e); }
   }
 
   async _fetchNumberOfUsersByDay(date = this.defaultMinDate) {
     const formatDate = format(date, 'yyyy-MM-dd');
     try {
       const { labels, values, users } = await userServices.fetchNunmberOfUsersByDay(formatDate);
-      console.log(await userServices.fetchNunmberOfUsersByDay(formatDate));
-      this.setState({
-        ...this.state,
+      this.setState(prev => ({
+        ...prev,
+        selectedDate: date,
         dayStats: {
-          ...this.state.dayStats,
+          ...prev.dayStats,
           options: {
-            ...this.state.dayStats.options,
+            ...prev.dayStats.options,
+            chart: {
+              ...prev.dayStats.options.chart,
+              id: formatDate
+            },
             xaxis: {
-              ...this.state.dayStats.xaxis,
+              ...prev.dayStats.options.xaxis,
               categories: labels
             }
           },
@@ -138,10 +121,11 @@ class QueueDashboard extends Component {
             data: values
           }]
         },
-        table: {...this.state.table,
+        table: {
+          ...prev.table,
           data: users
         }
-      }, ()=>{console.log(this.state.table.data)});
+      }), () => { console.log(1) });
     } catch (e) {
       this.setState({ ...this.state, isAccess: false })
       console.error(e);
@@ -184,39 +168,39 @@ class QueueDashboard extends Component {
 
   handleDateChange = (date) => {
     this._fetchNumberOfUsersByDay(date);
-    this.setState({ ...this.state, selectedDate: date }, () => {
-      console.log(this.state);
-    });
-
   }
 
-  handleTabsChange = (event, newValue) => {
-    this.setState({...this.state, tabs:newValue});
+  handleTabsChange = (event, tabs) => {
+    this.setState({ ...this.state, tabs });
   }
 
   render() {
-    const { isAccess } = this.state;
+    const { isAccess, loading } = this.state;
 
     if (!isAccess) return <QueueNotAccess />
-   
+
+    if (loading) return <div className="dashboard-loading"><CircularProgress /></div>
+
+    console.log(this.state)
+
     return (
       <div>
-      <Tabs
-        value={this.state.tabs}
-        onChange={this.handleTabsChange}
-        indicatorColor="primary"
-        textColor="primary"
-        centered
-      >
-        <Tab label="Статистика за день" icon={<WatchLaterOutlinedIcon />}/>
-        <Tab label="Статистика за все время" icon={<DateRangeOutlinedIcon />}/>
-      </Tabs>
-      <TabPanel value={this.state.tabs} index={0}>
-      <Grid item md={12} lg={12}>
-        <Grid container justify="center"
-           alignItems="center">
-          <Grid item md={12} lg={4}>
-            <DatePicker
+        <Tabs
+          value={this.state.tabs}
+          onChange={this.handleTabsChange}
+          indicatorColor="primary"
+          textColor="primary"
+          centered
+        >
+          <Tab label="Статистика за день" icon={<WatchLaterOutlinedIcon />} />
+          <Tab label="Статистика за все время" icon={<DateRangeOutlinedIcon />} />
+        </Tabs>
+        <TabPanel value={this.state.tabs} index={0}>
+          <Grid item md={12} lg={12}>
+            <Grid container justify="center"
+              alignItems="center">
+              <Grid item md={12} lg={4}>
+                <DatePicker
                   customInput={
                     <TextField
                       id="date"
@@ -239,38 +223,47 @@ class QueueDashboard extends Component {
                   onChange={this.handleDateChange}
                   selected={this.state.selectedDate}
                 />
+              </Grid>
+            </Grid>
           </Grid>
-        </Grid>
-      </Grid>
-      <Grid item md={12} lg={6}>
-        <div>
-          <Chart
-            options={this.state.dayStats.options}
-            series={this.state.dayStats.series}
-            type="bar"
-            width="100%"
-          />
-        </div>
-      </Grid>
-      <Grid item md={12} lg={6}>
-        <MaterialTable
-          title="Список абитуриентов"
-          columns={this.state.table.columns}
-          data={this.state.table.data}
-        />
-      </Grid>
-      </TabPanel>
-      <TabPanel value={this.state.tabs} index={1}>
-        <Grid item md={12} lg={8}>
-          <Chart
-            options={this.state.allTimeStats.options}
-            series={this.state.allTimeStats.series}
-            type="bar"
-            width="100%"
-          />
-        </Grid>
-      </TabPanel>
-    </div>
+          <Grid item md={12} lg={6}>
+            <div>
+              <Chart
+                options={this.state.dayStats.options}
+                series={this.state.dayStats.series}
+                type="bar"
+                width="100%"
+              />
+            </div>
+          </Grid>
+          <Grid item md={12} lg={6}>
+            <MaterialTable
+              title="Список абитуриентов"
+              columns={this.state.table.columns}
+              data={this.state.table.data}
+              localization={{
+                pagination: {
+                  labelRowsSelect: 'записей',
+                  labelDisplayedRows: '{from}-{to} из {count}'
+                },
+                toolbar: {
+                  searchPlaceholder: 'Поиск'
+                }
+              }}
+            />
+          </Grid>
+        </TabPanel>
+        <TabPanel value={this.state.tabs} index={1}>
+          <Grid item md={12} lg={8}>
+            <Chart
+              options={this.state.allTimeStats.options}
+              series={this.state.allTimeStats.series}
+              type="bar"
+              width="100%"
+            />
+          </Grid>
+        </TabPanel>
+      </div>
     )
   }
 }

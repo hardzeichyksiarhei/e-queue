@@ -59,10 +59,10 @@ class QueueReservationForm extends Component {
     constructor(props) {
         super(props);
 
-        const currentDate = new Date().setHours(9);
-        const minDate = new Date(2020, 4, 2, 9, 0);
+        this.currentDate = new Date().setHours(9, 0);
+        this.minDate = new Date(2020, 4, 2, 9, 0);
 
-        this.defaultMinDate = currentDate < minDate ? minDate : currentDate;
+        this.defaultMinDate = this.currentDate < this.minDate ? this.minDate : this.currentDate;
         this.defaultMaxDate = new Date(2020, 5, 1);
 
         this.defaultMinTime = new Date().setHours(9, 0, 0, 0);
@@ -85,7 +85,7 @@ class QueueReservationForm extends Component {
                 severity: 'success',
                 message: ''
             },
-            isNotAccess: process.env.NODE_ENV === 'production' && new Date() < this.defaultMinDate,
+            isNotAccess: process.env.NODE_ENV === 'production' && new Date() < this.minDate,
 
             closedDates: []
         };
