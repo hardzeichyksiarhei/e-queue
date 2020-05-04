@@ -9,8 +9,7 @@ import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import {
   Router,
   Switch,
-  Route,
-  Redirect
+  Route
 } from "react-router-dom";
 import { history } from './index';
 import { connect } from 'react-redux';
@@ -29,18 +28,6 @@ const theme = createMuiTheme({
     primary: { main: '#2157a1' }
   },
 }, ruRU);
-
-function RouteWrapper({
-  component: Component,
-  layout: Layout,
-  ...rest
-}) {
-  return (
-    <Route {...rest} render={(props) => <Layout {...props}>
-      <Component {...props} />
-    </Layout>} />
-  );
-}
 
 class App extends Component {
   componentDidMount() {
@@ -61,10 +48,10 @@ class App extends Component {
 
             <Router history={history}>
               <Switch>
-                <RouteWrapper exact name="home" path="/" component={Home} layout={(props) => <Default {...props} paperSize={'md'} />} />
-                <RouteWrapper exact name="login" path="/login" component={AdminLogin} layout={(props) => <Default {...props} paperSize={'sm'} />} />
-                <RouteWrapper exact name="dashboard" path="/dashboard" component={AdminDashboard} layout={(props) => <Default {...props} paperSize={'xl'} />} />
-                <RouteWrapper name="404" component={NoMatchPage} layout={(props) => <Default {...props} paperSize={'md'} />} />
+                <Route exact name="home" path="/" component={Home} />
+                <Route exact name="login" path="/login" component={AdminLogin} />
+                <Route exact name="dashboard" path="/dashboard" component={AdminDashboard} />
+                <Route name="404" component={NoMatchPage} />
               </Switch>
             </Router>
           </div>

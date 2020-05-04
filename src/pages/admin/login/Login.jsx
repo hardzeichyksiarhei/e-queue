@@ -2,7 +2,10 @@ import React from "react";
 import { Typography } from '@material-ui/core';
 import { Alert, AlertTitle } from '@material-ui/lab';
 import { withRouter } from 'react-router-dom';
+import { compose } from 'redux';
+import { withLayout } from '../../../hoc/withLayout'
 
+import Default from './../../../pages/layout/Default';
 import QueueLoginForm from '../../../components/admin/QueueLoginForm/QueueLoginForm';
 
 import './Login.sass';
@@ -21,4 +24,7 @@ function Login({ location }) {
     )
 }
 
-export default withRouter(Login);
+export default compose(
+    withRouter,
+    withLayout((props) => <Default {...props} paperSize={'md'} />)
+)(Login);

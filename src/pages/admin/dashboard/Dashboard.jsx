@@ -2,7 +2,9 @@ import React from "react";
 import { compose } from 'redux'
 
 import { withAuthRedirect } from '../../../hoc/withAuthRedirect'
+import { withLayout } from '../../../hoc/withLayout'
 
+import Default from './../../../pages/layout/Default';
 import QueueDashboard from '../../../components/admin/QueueDashboard/QueueDashboard'
 
 function AdminDashboard() {
@@ -15,5 +17,6 @@ function AdminDashboard() {
 }
 
 export default compose(
+    withLayout((props) => <Default {...props} paperSize={'xl'} />),
     withAuthRedirect
 )(AdminDashboard);
