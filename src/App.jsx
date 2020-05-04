@@ -20,7 +20,6 @@ import AdminDashboard from './pages/admin/dashboard/Dashboard';
 import NoMatchPage from './pages/NoMatchPage';
 
 import './App.sass';
-import Default from './pages/layout/Default';
 import { fetchUser } from './store/actions/authActions';
 
 const theme = createMuiTheme({

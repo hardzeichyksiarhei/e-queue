@@ -5,7 +5,6 @@ import { withRouter } from 'react-router-dom';
 import { compose } from 'redux';
 import { withLayout } from '../../../hoc/withLayout'
 
-import Default from './../../../pages/layout/Default';
 import QueueLoginForm from '../../../components/admin/QueueLoginForm/QueueLoginForm';
 
 import './Login.sass';
