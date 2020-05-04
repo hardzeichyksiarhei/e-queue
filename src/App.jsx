@@ -7,12 +7,12 @@ import { ruRU } from '@material-ui/core/locale';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 
 import {
-  HashRouter as Router,
+  Router,
   Switch,
   Route,
   Redirect
 } from "react-router-dom";
-// import store from './store';
+import { history } from './index';
 import { connect } from 'react-redux';
 
 import Home from './pages/Home';
@@ -72,7 +72,7 @@ class App extends Component {
           <div className="app-container">
             {process.env.NODE_ENV === 'production' ? <YMInitializer accounts={[62470567]} /> : ''}
 
-            <Router>
+            <Router history={history}>
               <Switch>
                 <RouteWrapper exact name="home" path="/" component={Home} layout={(props) => <Default {...props} paperSize={'md'} />} />
                 <RouteWrapper exact name="login" path="/login" component={AdminLogin} layout={(props) => <Default {...props} paperSize={'sm'} />} />

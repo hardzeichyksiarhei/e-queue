@@ -10,11 +10,11 @@ export default function TabPanel(props) {
         id={`scrollable-auto-tabpanel-${index}`}
         aria-labelledby={`scrollable-auto-tab-${index}`}
         {...other}
-        style={{padding: 12}}
+        style={{paddingTop: 30}}
       >
         {value === index && (
            <Grid container spacing={3} justify="center"
-           alignItems="center">{children} </Grid> 
+           alignItems="flex-start">{children} </Grid> 
         )}
       </div>
     );
