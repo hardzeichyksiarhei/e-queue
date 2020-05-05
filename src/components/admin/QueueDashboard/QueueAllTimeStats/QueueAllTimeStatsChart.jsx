@@ -64,7 +64,7 @@ class QueueAllTimeStatsChart extends Component {
 
         return (
             <Grid container spacing={3} justify="center" alignItems="flex-start">
-                <Grid item md={12} lg={8}>
+                <Grid item xs={12} md={8}>
                     <Chart
                         options={this.state.options}
                         series={this.state.series}

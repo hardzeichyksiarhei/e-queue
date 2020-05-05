@@ -35,10 +35,7 @@ class QueueDayStatsChart extends Component {
         }
     }
 
-    static getDerivedStateFromProps({ data, selectedDate }, prevState) {
-        console.log(data);
-        console.log(selectedDate);
-        
+    static getDerivedStateFromProps({ data, selectedDate }, prevState) {        
         if (!data || !selectedDate) return prevState;
 
         const { labels, values } = data;

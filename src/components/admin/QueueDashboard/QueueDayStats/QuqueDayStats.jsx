@@ -58,10 +58,10 @@ class QueueDayStats extends Component {
 
         return (
             <Grid container spacing={3} justify="center" alignItems="flex-start">
-                <Grid item md={12} lg={12}>
+                <Grid item xs={12} md={12} lg={12}>
                     <Grid container justify="center"
                         alignItems="center">
-                        <Grid item md={12} lg={4}>
+                        <Grid item xs={12} md={8} lg={4}>
                             <DatePicker
                                 customInput={
                                     <Grid container spacing={2}>
@@ -100,10 +100,10 @@ class QueueDayStats extends Component {
                         </Grid>
                     </Grid>
                 </Grid>
-                <Grid item md={12} lg={6}>
+                <Grid item xs={12} sm={12} md={6}>
                     <QueueDayStatsChart selectedDate={this.state.selectedDate} data={this.state.dayStats} />
                 </Grid>
-                <Grid item md={12} lg={6}>
+                <Grid item xs={12} sm={12} md={6}>
                     <QueueDayStatsTable data={this.state.dayStats} />
                 </Grid>
             </Grid> 
