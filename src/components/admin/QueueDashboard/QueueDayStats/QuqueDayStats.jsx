@@ -47,10 +47,7 @@ class QueueDayStats extends Component {
         try {
             const dayStats = await userServices.fetchNunmberOfUsersByDay(formatDate);
             this.setState(prev => ({ ...prev, dayStats, selectedDate: date, loading: false }));
-        } catch (e) {
-            this.setState({ ...this.state, loading: false })
-            console.error(e);
-        }
+        } catch (e) { console.error(e); }
     }
 
     render() {

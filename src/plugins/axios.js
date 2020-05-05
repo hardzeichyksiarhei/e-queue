@@ -8,7 +8,7 @@ import { history } from './../index';
 axios.interceptors.request.use(request => {
     const { auth: { token } } = store.getState();
     if (token) {
-        request.headers.common['Authorization'] = `Bearer ${token}`
+        request.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`
     }
     return request;
 });

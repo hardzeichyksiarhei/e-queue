@@ -31,15 +31,15 @@ class QueueLoginForm extends Component {
 
     async handleSendClick(event) {
         const { username, password } = this.state;
+        const { dispatch, history } = this.props;
 
-        await this.props.login(username, password);
+        try {
+            await dispatch(login(username, password));
+            history.push('/dashboard');
+        } catch(e) { console.error(e); }
     }
 
     render() {
-        const { token, hasErrors } = this.props;
-
-        if (token && !hasErrors) return <Redirect to="/dashboard" />
-
         return (
             <Grid container spacing={3}>
                 <Grid item xs={12}>
@@ -83,10 +83,4 @@ const mapStateToProps = state => ({
     hasErrors: state.auth.hasErrors,
 })
 
-const mapDispatchToProps = dispatch => ({
-    login: (username, password) => {
-        dispatch(login(username, password))
-    },
-});
-
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(QueueLoginForm));
+export default withRouter(connect(mapStateToProps)(QueueLoginForm));

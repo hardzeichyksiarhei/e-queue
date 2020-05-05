@@ -10,7 +10,6 @@ import QueueLoginForm from '../../../components/admin/QueueLoginForm/QueueLoginF
 import './Login.sass';
 
 function Login({ location }) {
-
     return (
         <div className="login-page">
             <Typography className="login-title" variant="h5">Войти в панель администратора</Typography>
@@ -24,6 +23,6 @@ function Login({ location }) {
 }
 
 export default compose(
-    withRouter,
-    withLayout(null, { paperSize: 'sm' })
+    withLayout(null, { paperSize: 'sm' }),
+    withRouter
 )(Login);

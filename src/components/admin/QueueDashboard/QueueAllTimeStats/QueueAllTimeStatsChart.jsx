@@ -53,10 +53,7 @@ class QueueAllTimeStatsChart extends Component {
                 series: [{ name: 'Количество абитуриентов', data: values }],
                 loading: false
             });
-        } catch (e) {
-            this.setState({ ...this.state, loading: false })
-            console.error(e);
-        }
+        } catch (e) { console.error(e); }
     }
 
     render() {
