@@ -13,11 +13,13 @@ class QueueDayStats extends Component {
     constructor(props) {
         super(props);
 
+        this.currentDate = new Date();
+
         this.defaultMinDate = new Date(2020, 4, 2, 9, 0);
         this.defaultMaxDate = new Date(2020, 5, 1);
 
         this.state = {
-            selectedDate: this.defaultMinDate,
+            selectedDate: this.currentDate <= this.defaultMaxDate ? this.currentDate : this.defaultMinDate,
 
             loading: true,
             dayStats: null,
@@ -42,7 +44,7 @@ class QueueDayStats extends Component {
         //this.setState(prev => ({ ...prev, selectedDate: date }));
     }
 
-    async _fetchNumberOfUsersByDay(date = this.defaultMinDate) {
+    async _fetchNumberOfUsersByDay(date = this.state.selectedDate) {
         const formatDate = format(date, 'yyyy-MM-dd');
         try {
             const dayStats = await userServices.fetchNunmberOfUsersByDay(formatDate);
