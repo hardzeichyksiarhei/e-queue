@@ -44,11 +44,16 @@ class QueueAllTimeStatsChart extends Component {
     async _fetchNunmberOfUsers() {
         try {
             const { labels, values } = await userServices.fetchNunmberOfUsers();
+            
             this.setState({
                 ...this.state,
                 options: {
                     ...this.state.options,
-                    xaxis: { categories: labels }
+                    xaxis: { categories: labels },
+                    title: {
+                        ...this.state.options.title,
+                        text: `Распределение количества абитуриентов по датам (${values.reduce((a, b) => a + b)})`
+                    }
                 },
                 series: [{ name: 'Количество абитуриентов', data: values }],
                 loading: false
