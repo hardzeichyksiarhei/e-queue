@@ -272,6 +272,7 @@ class QueueReservationForm extends Component {
                             className="date-range"
                             customInput={
                                 <Grid container spacing={2}>
+                                    <Grid item className="pb-0" xs={12}><Typography variantMapping={{subtitle2: 'b'}} variant="subtitle2">Выберите дату:</Typography></Grid>
                                     <Grid item lg={9} md={9} xs={12}>
                                         <div className="date-wrapper">
                                             <TextField
@@ -292,7 +293,6 @@ class QueueReservationForm extends Component {
                                             <DateRange />&nbsp;&nbsp;|&nbsp;&nbsp;<Schedule />
                                         </Button>
                                     </Grid>
-
                                 </Grid>
                             }
                             locale={ru}
@@ -311,6 +311,15 @@ class QueueReservationForm extends Component {
                             filterDate={this._filterDate}
                             shouldCloseOnSelect={false}
                         />
+                    </Grid>
+
+                    <Grid item className="pt-0" xs={12}>
+                        <Alert
+                            variant="filled"
+                            severity="info"
+                        >
+                            Изменить дату и время регистрации можно путем повторного бронирования на использованный E-mail
+                        </Alert>
                     </Grid>
 
                     <Grid item xs={12} className={classes.checkedWrapper}>
