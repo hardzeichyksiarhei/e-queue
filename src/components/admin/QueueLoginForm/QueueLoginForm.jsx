@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Grid, TextField, Button } from '@material-ui/core';
 
-import { withRouter, Redirect } from 'react-router-dom'
+import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 
 import { login } from '../../../store/actions/authActions'
@@ -41,38 +41,40 @@ class QueueLoginForm extends Component {
 
     render() {
         return (
-            <Grid container spacing={3}>
-                <Grid item xs={12}>
-                    <TextField
-                        id="login"
-                        variant="outlined"
-                        fullWidth
-                        value={this.state.login}
-                        onChange={this.handleLoginChange}
-                        label="Login"
-                        required
-                    />
-                </Grid>
+            <form onSubmit={this.handleSendClick}>
+                <Grid container spacing={3}>
+                    <Grid item xs={12}>
+                        <TextField
+                            id="login"
+                            variant="outlined"
+                            fullWidth
+                            value={this.state.login}
+                            onChange={this.handleLoginChange}
+                            label="Login"
+                            required
+                        />
+                    </Grid>
 
-                <Grid item xs={12}>
-                    <TextField
-                        type="password"
-                        id="last-name"
-                        variant="outlined"
-                        fullWidth
-                        value={this.state.password}
-                        onChange={this.handlePasswordChange}
-                        label="Password"
-                        required
-                    />
-                </Grid>
+                    <Grid item xs={12}>
+                        <TextField
+                            type="password"
+                            id="last-name"
+                            variant="outlined"
+                            fullWidth
+                            value={this.state.password}
+                            onChange={this.handlePasswordChange}
+                            label="Password"
+                            required
+                        />
+                    </Grid>
 
-                <Grid item xs={12}>
-                    <Button size="large" variant="contained" color="primary" onClick={this.handleSendClick}>
-                        Войти
-                    </Button>
+                    <Grid item xs={12}>
+                        <Button type="submit" size="large" variant="contained" color="primary">
+                            Войти
+                        </Button>
+                    </Grid>
                 </Grid>
-            </Grid>
+            </form>
         )
     }
 }
