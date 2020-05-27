@@ -42,7 +42,7 @@ class QueueAllTimeStatsChart extends Component {
                     chart: { id: 'Распределение абитуриентов по времени' },
                     xaxis: { categories: [] },
                     legend: { show: false },
-                    plotOptions: { bar: { distributed: true }, },
+                    plotOptions: { bar: { horizontal: true, distributed: true } },
                     title: {
                         text: 'Распределение абитуриентов по времени',
                         align: 'center',
