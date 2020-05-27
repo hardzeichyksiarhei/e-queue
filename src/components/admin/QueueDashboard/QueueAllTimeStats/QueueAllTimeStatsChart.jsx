@@ -57,7 +57,7 @@ class QueueAllTimeStatsChart extends Component {
                             color: '#263238'
                         },
                     },
-                    theme: { mode: 'light', palette: 'palette2' }
+                    theme: { mode: 'light', palette: 'palette8' }
                 },
                 series: [{ name: undefined, data: [] }]
             }
