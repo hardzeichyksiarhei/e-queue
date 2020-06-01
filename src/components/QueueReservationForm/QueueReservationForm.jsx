@@ -99,9 +99,11 @@ class QueueReservationForm extends Component {
 
             minTime: this.defaultMinTime,
             maxTime: this.defaultMaxTime,
-
+        
             closedDates
-        }, () => { this._initDate(); });
+        });
+
+        //}, () => { this._initDate(); });
     }
 
 
