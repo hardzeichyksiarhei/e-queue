@@ -63,7 +63,7 @@ class QueueReservationForm extends Component {
         this.minDate = new Date(2020, 4, 2, 9, 0);
 
         this.defaultMinDate = this.currentDate < this.minDate ? this.minDate : this.currentDate;
-        this.defaultMaxDate = new Date(2020, 5, 1);
+        this.defaultMaxDate = new Date(2020, 5, 1, 18, 45);
 
         this.defaultMinTime = new Date().setHours(9, 0, 0, 0);
         this.defaultMaxTime = new Date().setHours(18, 45, 0, 0);
@@ -101,9 +101,7 @@ class QueueReservationForm extends Component {
             maxTime: this.defaultMaxTime,
         
             closedDates
-        });
-
-        //}, () => { this._initDate(); });
+        }, () => { this._initDate(); });
     }
 
 
